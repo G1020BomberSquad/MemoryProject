@@ -56,6 +56,16 @@
         <Grid x:Name="set2" HorizontalAlignment="Left" Height="54" Margin="619,242,0,0" VerticalAlignment="Top" Width="106" Background="#29387C">
             <Button x:Name="setNames" Content="Set" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="86" Background="#5D689A" RenderTransformOrigin="0.585,0.971" Height="34" FontFamily="Viner Hand ITC" FontSize="20" Click="setNames_Click"/>
         </Grid>
+<<<<<<< HEAD
+        <Grid x:Name="GameGrid" HorizontalAlignment="Left" Height="730" Margin="623,264,0,0" VerticalAlignment="Top" Width="1041" RenderTransformOrigin="0.191,0.183" Background="#29387C"/>
+        <Button x:Name="start" Content="Start" HorizontalAlignment="Left" Margin="825,140,0,0" VerticalAlignment="Top" Width="465" Height="96" FontFamily="Viner Hand ITC" FontSize="48" Background="#29387C" Foreground="#5D689A" Click="start_Click"/>
+        <Label x:Name="timer" Content="00:60&#xD;&#xA;" HorizontalAlignment="Left" Margin="1342,163,0,0" VerticalAlignment="Top" Height="49" Width="140" Background="#FFFFFDFD" FontSize="36"/>
+        <Button x:Name="insertName1" Content="Set name 1" HorizontalAlignment="Left" Margin="203,163,0,0" VerticalAlignment="Top" Width="222" Height="35" Click="insertName1_Click"/>
+        <TextBox x:Name="nameEnter1" HorizontalAlignment="Left" Height="29" Margin="40,163,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="148"/>
+        <Button x:Name="insertName2" Content="Set name 2" HorizontalAlignment="Left" Margin="203,213,0,0" VerticalAlignment="Top" Width="222" Height="35" Click="insertName2_Click"/>
+        <TextBox x:Name="nameEnter2" HorizontalAlignment="Left" Height="29" Margin="40,213,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="148"/>
+=======
+>>>>>>> 1db48b30cb7e8de1ca306eee96306bd9114ef723
 
 
     </Grid>
