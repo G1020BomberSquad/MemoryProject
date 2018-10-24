@@ -153,50 +153,14 @@ namespace SpellenScherm
         {
             if (turnName1 == true)
             {
-                var bc = new BrushConverter();
+                Spellenscherm.main.setTurn1 = "Aan de beurt";
+                Spellenscherm.main.setTurn2 = "";
 
-
-
-
-
-
-
-
-
-                foreach (Spellenscherm window in Application.Current.Windows)
-                {
-                    if (window.GetType() == typeof(Spellenscherm))
-                    {
-                        (window as Spellenscherm).name1.Background = Brushes.HotPink;
-                    }
-                }
-
-                foreach (Spellenscherm window in Application.Current.Windows)
-                {
-                    if (window.GetType() == typeof(Spellenscherm))
-                    {
-                        (window as Spellenscherm).name2.Background = (Brush)bc.ConvertFrom("#5d689a");
-                    }
-                }
             }
             else if (turnName2 == true)
             {
-                var bc = new BrushConverter();
-                foreach (Spellenscherm window in Application.Current.Windows)
-                {
-                    if (window.GetType() == typeof(Spellenscherm))
-                    {
-                        (window as Spellenscherm).name2.Background = Brushes.HotPink;
-                    }
-                }
-
-                foreach (Spellenscherm window in Application.Current.Windows)
-                {
-                    if (window.GetType() == typeof(Spellenscherm))
-                    {
-                        (window as Spellenscherm).name1.Background = (Brush)bc.ConvertFrom("#5d689a");
-                    }
-                }
+                Spellenscherm.main.setTurn1 = "";
+                Spellenscherm.main.setTurn2 = "Aan de beurt";
             }
         }
 
@@ -266,7 +230,7 @@ namespace SpellenScherm
 
             scoreName1 = 0;
             scoreName2 = 0;
-           // showTurn();
+            showTurn();
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace Memory
         {
             grid = new MemoryGrid(GameGrid, 4, 4);
             start.Visibility = Visibility.Collapsed;
-            name1.Background = Brushes.HotPink;
+            turn1.Content = "Aan de beurt";
         }
 
         private void setNames_Click(object sender, RoutedEventArgs e)
@@ -104,17 +104,16 @@ namespace Memory
             set { Dispatcher.Invoke(new Action(() => { scoreName2.Content = value; })); }
         }
 
-        //internal string setName1
-        //{
-        //    get { return name1.Background.ToString(); }
-        //    set { Dispatcher.Invoke(new Action(() => { name1.Background = value; })); }
-        //}
+        internal string setTurn1
+        {
+            get { return turn1.Content.ToString(); }
+            set { Dispatcher.Invoke(new Action(() => { turn1.Content = value; })); }
+        }
 
-        //internal string setName2
-        //{
-        //    get { return name2.Background.ToString(); }
-        //    set { Dispatcher.Invoke(new Action(() => { name2.Background = value; })); }
-        //}
-
+        internal string setTurn2
+        {
+            get { return turn2.Content.ToString(); }
+            set { Dispatcher.Invoke(new Action(() => { turn2.Content = value; })); }
+        }
     }
 }
