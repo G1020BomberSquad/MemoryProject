@@ -46,8 +46,8 @@ namespace Memory
             string userName1 = nameEnter1.Text;
             string userName2 = nameEnter2.Text;
 
-             grid.player1 = userName1;
-             grid.player2 = userName2;
+             MemoryGrid.player1 = userName1;
+             MemoryGrid.player2 = userName2;
 
             name1.Content = userName1;
             name2.Content = userName2;

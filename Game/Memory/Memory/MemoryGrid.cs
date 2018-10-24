@@ -14,8 +14,8 @@ namespace SpellenScherm
     public class MemoryGrid
     {
         private Grid grid;
-        public string player1 { get; set; }
-        public string player2 { get; set; }
+        public static string player1 { get; set; }
+        public static string player2 { get; set; }
         private int rows, cols;
         static int numberOfClicks = 0;
         static int scoreName1Tot;
