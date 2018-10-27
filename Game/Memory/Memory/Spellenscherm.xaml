@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Memory"
         mc:Ignorable="d"
-        Title="Spellenscherm" Height="1080" Width="1920">
+        Title="Spellenscherm" Height="1080" Width="1920" WindowState="Maximized">
     <Grid Background="#3C4986">
 
         <Grid HorizontalAlignment="Left" Height="107" VerticalAlignment="Top" Width="1920" Background="#29387C" Margin="0,0,-8,0">
