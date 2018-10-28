@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace Memory
 {
@@ -22,11 +23,17 @@ namespace Memory
     public partial class Spellenscherm : Window
     {
         private MemoryGrid grid;
+        private string path = @"Save1.csv";
+        public static string delimiter = ";";
 
         public Spellenscherm()
         {
             InitializeComponent();
             main = this;
+            if (!File.Exists(path))
+            {
+                File.WriteAllText(path, "ready");
+            }
         }
 
         private void menu_Click(object sender, RoutedEventArgs e)
@@ -39,6 +46,8 @@ namespace Memory
             grid = new MemoryGrid(GameGrid, 4, 4);
             start.Visibility = Visibility.Collapsed;
             name1.Background = Brushes.HotPink;
+
+            SetCardsSave.Write();
         }
 
         private void setNames_Click(object sender, RoutedEventArgs e)
@@ -53,6 +62,8 @@ namespace Memory
             name2.Content = userName2;
             set1.Visibility = Visibility.Collapsed;
             set2.Visibility = Visibility.Collapsed;
+
+            File.WriteAllText(path, userName1 + delimiter + userName2 + Environment.NewLine);
         }
 
         private void SaveGame_Click(object sender, RoutedEventArgs e)

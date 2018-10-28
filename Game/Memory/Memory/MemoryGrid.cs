@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.IO;
+using System.Text;
 
 namespace SpellenScherm
 {
@@ -106,6 +108,8 @@ namespace SpellenScherm
                         random1.Add(Convert.ToString(imageNR));
                         ImageSource source = new BitmapImage(new Uri("images/" + imageNR + ".png", UriKind.Relative));
                         images.Add(source);
+
+                        SetCardsSave.Write();
                     }
                 }
                 if (i >= 8)
@@ -383,6 +387,33 @@ namespace SpellenScherm
                 string winner = (scoreName1Tot > scoreName2Tot) ? player1 : player2;
                 MessageBox.Show(winner + " heeft gewonnen!");
             }
+        }
+    }
+
+    public class SetCardsSave
+    {
+
+
+        public static void Write()
+        {
+            string path = @"Save1.csv";
+
+            var reader = new StreamReader(File.OpenRead(path));
+            var data = new List<List<string>>();
+
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(';');
+
+                data.Add(new List<String> { values[0], values[1]
+                });
+            }
+            reader.Close();
+
+            string delimiter = ";";
+
+            File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + Environment.NewLine + "test");
         }
     }
 }
