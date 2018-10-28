@@ -91,6 +91,24 @@ namespace SpellenScherm
             List<string> random1 = new List<string>();
             List<string> random2 = new List<string>();
 
+
+            string C1 = null;
+            string C2 = null;
+            string C3 = null;
+            string C4 = null;
+            string C5 = null;
+            string C6 = null;
+            string C7 = null;
+            string C8 = null;
+            string C9 = null;
+            string C10 = null;
+            string C11 = null;
+            string C12 = null;
+            string C13 = null;
+            string C14 = null;
+            string C15 = null;
+            string C16 = null;
+
             for (int i = 0; i < 16; i++)
             {
                 if (i < 8)
@@ -109,7 +127,55 @@ namespace SpellenScherm
                         ImageSource source = new BitmapImage(new Uri("images/" + imageNR + ".png", UriKind.Relative));
                         images.Add(source);
 
-                        SetCardsSave.Write();
+                        string path = @"Save1.csv";
+
+                        var reader = new StreamReader(File.OpenRead(path));
+                        var data = new List<List<string>>();
+
+                        while (!reader.EndOfStream)
+                        {
+                            var line = reader.ReadLine();
+                            var values = line.Split(';');
+
+                            data.Add(new List<String> { values[0], values[1]
+                        });
+                        }
+                        reader.Close();
+
+                        string delimiter = ";";
+
+                        if (i == 0)
+                        {
+                            C1 = Convert.ToString(imageNR);
+                        }
+                        if (i == 1)
+                        {
+                            C2 = Convert.ToString(imageNR);
+                        }
+                        if (i == 2)
+                        {
+                            C3 = Convert.ToString(imageNR);
+                        }
+                        if (i == 3)
+                        {
+                            C4 = Convert.ToString(imageNR);
+                        }
+                        if (i == 4)
+                        {
+                            C5 = Convert.ToString(imageNR);
+                        }
+                        if (i == 5)
+                        {
+                            C6 = Convert.ToString(imageNR);
+                        }
+                        if (i == 6)
+                        {
+                            C7 = Convert.ToString(imageNR);
+                        }
+                        if (i == 7)
+                        {
+                            C8 = Convert.ToString(imageNR);
+                        }
                     }
                 }
                 if (i >= 8)
@@ -127,6 +193,59 @@ namespace SpellenScherm
                         random2.Add(Convert.ToString(imageNR));
                         ImageSource source = new BitmapImage(new Uri("images/" + imageNR + ".png", UriKind.Relative));
                         images.Add(source);
+
+                        string path = @"Save1.csv";
+
+                        var reader = new StreamReader(File.OpenRead(path));
+                        var data = new List<List<string>>();
+
+                        while (!reader.EndOfStream)
+                        {
+                            var line = reader.ReadLine();
+                            var values = line.Split(';');
+
+                            data.Add(new List<String> { values[0], values[1]
+                        });
+                        }
+                        reader.Close();
+
+                        string delimiter = ";";
+
+                        if (i == 8)
+                        {
+                            C9 = Convert.ToString(imageNR);
+                        }
+                        if (i == 9)
+                        {
+                            C10 = Convert.ToString(imageNR);
+                        }
+                        if (i == 10)
+                        {
+                            C11 = Convert.ToString(imageNR);
+                        }
+                        if (i == 11)
+                        {
+                            C12 = Convert.ToString(imageNR);
+                        }
+                        if (i == 12)
+                        {
+                            C13 = Convert.ToString(imageNR);
+                        }
+                        if (i == 13)
+                        {
+                            C14 = Convert.ToString(imageNR);
+                        }
+                        if (i == 14)
+                        {
+                            C15 = Convert.ToString(imageNR);
+                        }
+                        if (i == 15)
+                        {
+                            C16 = Convert.ToString(imageNR);
+                        }
+
+
+                        File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + Environment.NewLine + C1 + delimiter + C2 + delimiter + C3 + delimiter + C4 + Environment.NewLine + C5 + delimiter + C6 + delimiter + C7 + delimiter + C8 + Environment.NewLine + C9 + delimiter + C10 + delimiter + C11 + delimiter + C12 + Environment.NewLine + C13 + delimiter + C14 + delimiter + C15 + delimiter + C16);
                     }
                 }
             }
