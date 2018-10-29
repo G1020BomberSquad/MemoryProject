@@ -127,21 +127,6 @@ namespace SpellenScherm
                         ImageSource source = new BitmapImage(new Uri("images/" + imageNR + ".png", UriKind.Relative));
                         images.Add(source);
 
-                        string path = @"Save1.csv";
-
-                        var reader = new StreamReader(File.OpenRead(path));
-                        var data = new List<List<string>>();
-
-                        while (!reader.EndOfStream)
-                        {
-                            var line = reader.ReadLine();
-                            var values = line.Split(';');
-
-                            data.Add(new List<String> { values[0], values[1]
-                        });
-                        }
-                        reader.Close();
-
                         if (i == 0)
                         {
                             C1 = Convert.ToString(imageNR);
@@ -202,7 +187,7 @@ namespace SpellenScherm
                             var line = reader.ReadLine();
                             var values = line.Split(';');
 
-                            data.Add(new List<String> { values[0], values[1]
+                            data.Add(new List<String> { values[0], values[1], values[2], values[3]
                         });
                         }
                         reader.Close();
@@ -243,7 +228,7 @@ namespace SpellenScherm
                         }
 
 
-                        File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + Environment.NewLine + C1 + delimiter + C2 + delimiter + C3 + delimiter + C4 + Environment.NewLine + C5 + delimiter + C6 + delimiter + C7 + delimiter + C8 + Environment.NewLine + C9 + delimiter + C10 + delimiter + C11 + delimiter + C12 + Environment.NewLine + C13 + delimiter + C14 + delimiter + C15 + delimiter + C16 + Environment.NewLine);
+                        File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + C1 + delimiter + C2 + delimiter + C3 + delimiter + C4 + Environment.NewLine + C5 + delimiter + C6 + delimiter + C7 + delimiter + C8 + Environment.NewLine + C9 + delimiter + C10 + delimiter + C11 + delimiter + C12 + Environment.NewLine + C13 + delimiter + C14 + delimiter + C15 + delimiter + C16 + Environment.NewLine);
                     }
                 }
             }
@@ -369,6 +354,7 @@ namespace SpellenScherm
 
 
                 string path = @"Save1.csv";
+                string cardnr = null;
 
                 var reader = new StreamReader(File.OpenRead(path));
                 var data = new List<List<string>>();
@@ -378,25 +364,36 @@ namespace SpellenScherm
                     var line = reader.ReadLine();
                     var values = line.Split(';');
 
-                    data.Add(new List<String> { values[0], values[1]
+                    data.Add(new List<String> { values[0], values[1], values[2], values[3]
                         });
                 }
                 reader.Close();
 
-                string delimiter = ";";
 
-                for (int i = 1; i < 5; i++)
+                for (int b = 1; b < 9; b++)
                 {
-                    for (int x = 0; x < 4; x++)
+                    if (Convert.ToString(card1.Source) == "pack://application:,,,/Memory;component/images/" + b + ".png")
                     {
-                        if (data[i][x] == Convert.ToString(card1.Source))
+                        cardnr = Convert.ToString(b);
+                    }
+                }
+
+                string delimiter = ";";
+                int i;
+                int x;
+                for (i = 1; i < 5; i++)
+                {
+                    for (x = 0; x < 4; x++)
+                    {
+                        var test = data[i][x];
+                        if (test == cardnr)
                         {
                             data[i][x] = null;
                         }
                     }
                 }
 
-                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + "ready");
+                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine);
             }
             else
             {
