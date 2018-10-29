@@ -142,8 +142,6 @@ namespace SpellenScherm
                         }
                         reader.Close();
 
-                        string delimiter = ";";
-
                         if (i == 0)
                         {
                             C1 = Convert.ToString(imageNR);
@@ -245,7 +243,7 @@ namespace SpellenScherm
                         }
 
 
-                        File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + Environment.NewLine + C1 + delimiter + C2 + delimiter + C3 + delimiter + C4 + Environment.NewLine + C5 + delimiter + C6 + delimiter + C7 + delimiter + C8 + Environment.NewLine + C9 + delimiter + C10 + delimiter + C11 + delimiter + C12 + Environment.NewLine + C13 + delimiter + C14 + delimiter + C15 + delimiter + C16);
+                        File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + Environment.NewLine + C1 + delimiter + C2 + delimiter + C3 + delimiter + C4 + Environment.NewLine + C5 + delimiter + C6 + delimiter + C7 + delimiter + C8 + Environment.NewLine + C9 + delimiter + C10 + delimiter + C11 + delimiter + C12 + Environment.NewLine + C13 + delimiter + C14 + delimiter + C15 + delimiter + C16 + Environment.NewLine);
                     }
                 }
             }
@@ -367,6 +365,38 @@ namespace SpellenScherm
             if (Convert.ToString(card1.Source) == Convert.ToString(card2.Source) && (card1 != card2))
             {
                 getPoint(card1, card2);
+
+
+
+                string path = @"Save1.csv";
+
+                var reader = new StreamReader(File.OpenRead(path));
+                var data = new List<List<string>>();
+
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(';');
+
+                    data.Add(new List<String> { values[0], values[1]
+                        });
+                }
+                reader.Close();
+
+                string delimiter = ";";
+
+                for (int i = 1; i < 5; i++)
+                {
+                    for (int x = 0; x < 4; x++)
+                    {
+                        if (data[i][x] == Convert.ToString(card1.Source))
+                        {
+                            data[i][x] = null;
+                        }
+                    }
+                }
+
+                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + "ready");
             }
             else
             {
@@ -506,33 +536,6 @@ namespace SpellenScherm
                 string winner = (scoreName1Tot > scoreName2Tot) ? player1 : player2;
                 MessageBox.Show(winner + " heeft gewonnen!");
             }
-        }
-    }
-
-    public class SetCardsSave
-    {
-
-
-        public static void Write()
-        {
-            string path = @"Save1.csv";
-
-            var reader = new StreamReader(File.OpenRead(path));
-            var data = new List<List<string>>();
-
-            while (!reader.EndOfStream)
-            {
-                var line = reader.ReadLine();
-                var values = line.Split(';');
-
-                data.Add(new List<String> { values[0], values[1]
-                });
-            }
-            reader.Close();
-
-            string delimiter = ";";
-
-            File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + Environment.NewLine + "test");
         }
     }
 }
