@@ -258,19 +258,22 @@ namespace SpellenScherm
             // if 2 images are clicked, there are the same and the same card is not clicked twice
             if (Convert.ToString(card1.Source) == Convert.ToString(card2.Source) && (card1 != card2))
             {
+                playSoundPositive();
                 getPoint(card1, card2);
             }
             // if 2 images are clicked, they are not the same and the same card is not clicked twice
             else
             {
+                playSoundNegative();
                 resetCards(Image1, Image2);
             }   
 
             checkTurn();
 
-            // if the clicked card is clicked twice, the player keeps their turn
+            // if the same card is clicked twice, the player keeps their turn
             if (Convert.ToString(card1.Source) == Convert.ToString(card2.Source) && (card1 == card2))
             {
+                playSoundNegative();
                 stayTurn();
             }
 
@@ -412,14 +415,35 @@ namespace SpellenScherm
             // when the scores of player1 and player2 are the same
             if (scoreName1Tot == scoreName2Tot)
             {
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"/sounds/even.wav");
+                player.Play();
                 MessageBox.Show("Gelijkspel!");
             }
             // if the scores of player1 and player2 are not the same, announce the winner, who is the player with the most points
             else
             {
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"/sounds/win.wav");
+                player.Play();
                 string winner = (scoreName1Tot > scoreName2Tot) ? player1 : player2;
                 MessageBox.Show(winner + " heeft gewonnen!");
             }
+        }
+
+        private void playSoundPositive()
+        {
+            System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"C:\Users\johan\Downloads\soundeffects\positive\1.wav");
+            player.Play();
+        }
+
+        private void playSoundNegative()
+        {
+            int soundNR = 0;
+
+            Random rnd = new Random();
+            soundNR = rnd.Next(1, 8);
+
+            System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"C:\Users\johan\Downloads\soundeffects\negative\" + soundNR + ".wav");
+            player.Play();
         }
     }
 }

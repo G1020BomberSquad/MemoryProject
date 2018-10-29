@@ -102,7 +102,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="images\1.png" />
     <Resource Include="images\2.png" />
@@ -114,6 +113,18 @@
     <Resource Include="images\8.png" />
     <Resource Include="images\back.png" />
     <Resource Include="images\logo2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="sounds\negative\1.wav" />
+    <Content Include="sounds\negative\2.wav" />
+    <Content Include="sounds\negative\3.wav" />
+    <Content Include="sounds\negative\4.wav" />
+    <Content Include="sounds\negative\5.wav" />
+    <Content Include="sounds\negative\6.wav" />
+    <Content Include="sounds\negative\7.wav" />
+    <Content Include="sounds\base.wav" />
+    <Content Include="sounds\even.wav" />
+    <Content Include="sounds\win.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
