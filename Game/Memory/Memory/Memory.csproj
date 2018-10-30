@@ -55,13 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-<<<<<<< HEAD
     <Compile Include="Highscores.xaml.cs">
       <DependentUpon>Highscores.xaml</DependentUpon>
     </Compile>
-=======
     <Compile Include="LoadSave.cs" />
->>>>>>> 8a4ca3510dee04e38bcb389ebf4fd313d895bfcc
     <Compile Include="MemoryGrid.cs" />
     <Compile Include="Spellenscherm.xaml.cs">
       <DependentUpon>Spellenscherm.xaml</DependentUpon>
