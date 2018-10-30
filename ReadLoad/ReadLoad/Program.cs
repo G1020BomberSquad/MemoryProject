@@ -4,17 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Security.Permissions;
+using Microsoft.Win32;
 
 namespace ReadLoad
 {
     class Program
     {
         static void Main(string[] args)
-        {
-            
+        {       
 
             try
             {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
                 string[] fileInSave = Directory.GetFiles(@"..\..\.\saves\", "*.csv");
                 foreach(string save in fileInSave)
                 {

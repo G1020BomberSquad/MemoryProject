@@ -4,50 +4,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 
 namespace Memory
 {
     class LoadSave
     {
-        public string[] GetSavesFromDir()
+        private static string fileData = "";
+        public static string[,] GetSavefileData()
         {
-            //Get all save files in the saves folder and returns an array
-            string[] fileInSave = Directory.GetFiles(@"..\..\.\saves\", "*.csv");
-            return fileInSave;
-        }
-
-        public string[,] GetSavefileData(string selectedSave)
-        {
-            //Get savefile
-            string filePath = (@"..\..\.\saves\" + selectedSave);
-
-            //Parse save into string
-            string fileData = File.ReadAllText(filePath);
-
-            fileData = fileData.Replace('\n', '\r');
-
-            //Split lines into string
-            string[] lines = fileData.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
-
-            //Get total rows and columns
-            int totalRows = lines.Length;
-            int totalCols = lines[0].Split(';').Length;
-
-            //Make new 2d array
-            string[,] resultVals = new string[totalRows, totalCols];
-
-            //Place data in array
-            for (int row = 0; row < totalRows; row++)
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "saves");
+            if (openFileDialog.ShowDialog() == true)
             {
-                string[] line_r = lines[row].Split(';');
+                fileData = File.ReadAllText(openFileDialog.FileName);
 
-                for (int col = 0; col < totalCols; col++)
+                fileData = fileData.Replace('\n', '\r');
+
+                //Split lines into string
+                string[] lines = fileData.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+                //Get total rows and columns
+                int totalRows = lines.Length;
+                int totalCols = lines[0].Split(';').Length;
+
+                //Make new 2d array
+                string[,] resultVals = new string[totalRows, totalCols];
+
+                //Place data in array
+                for (int row = 0; row < totalRows; row++)
                 {
-                    resultVals[row, col] = line_r[col];
-                }
-            }
+                    string[] line_r = lines[row].Split(';');
 
-            return resultVals;
+                    for (int col = 0; col < totalCols; col++)
+                    {
+                        resultVals[row, col] = line_r[col];
+                    }
+                }
+
+                return resultVals;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

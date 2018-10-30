@@ -123,6 +123,7 @@ namespace Memory
         private void LoadGame_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("You can't load a game yet.");
+
         }
 
         /// <summary>
