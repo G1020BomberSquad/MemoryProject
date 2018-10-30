@@ -37,7 +37,7 @@ namespace Memory
 
         private void highscore_Click(object sender, RoutedEventArgs e)
         {
-
+            new Highscores().ShowDialog();
         }
 
         private void themas_Click(object sender, RoutedEventArgs e)
