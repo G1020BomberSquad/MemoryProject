@@ -51,6 +51,9 @@ namespace SpellenScherm
         private Image Image1;
         private Image Image2;
 
+        // Folder where images are stored
+        public string folder = "images";
+
         /// <summary>
         /// Initialize the grid and assign the images to the grid
         /// </summary>
@@ -94,7 +97,7 @@ namespace SpellenScherm
                 {
                     // assign the back of the image
                     Image back = new Image();
-                    back.Source = new BitmapImage(new Uri("/images/back.png", UriKind.Relative));
+                    back.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.Relative));
 
                     // when one of the players click on a card
                     back.MouseDown += new System.Windows.Input.MouseButtonEventHandler(CardClick);
@@ -160,7 +163,7 @@ namespace SpellenScherm
                     else
                     {
                         random1.Add(Convert.ToString(imageNR));
-                        ImageSource source = new BitmapImage(new Uri("images/" + imageNR + ".png", UriKind.Relative));
+                        ImageSource source = new BitmapImage(new Uri(folder + "/" + imageNR + ".png", UriKind.Relative));
                         images.Add(source);
 
                         if (i == 0)
@@ -421,7 +424,7 @@ namespace SpellenScherm
             // if the same card is clicked twice, the player keeps their turn
             if (Convert.ToString(card1.Source) == Convert.ToString(card2.Source) && (card1 == card2))
             {
-                playSoundNegative();
+                playSoundStupid();
                 stayTurn();
             }
 
@@ -587,15 +590,17 @@ namespace SpellenScherm
             // when the scores of player1 and player2 are the same
             if (scoreName1Tot == scoreName2Tot)
             {
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"/sounds/even.wav");
-                player.Play();
+                System.IO.Stream str = Memory.Properties.Resources.even;
+                System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
+                snd.Play();
                 MessageBox.Show("Gelijkspel!");
             }
             // if the scores of player1 and player2 are not the same, announce the winner, who is the player with the most points
             else
             {
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"/sounds/win.wav");
-                player.Play();
+                System.IO.Stream str = Memory.Properties.Resources.win;
+                System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
+                snd.Play();
                 string winner = (scoreName1Tot > scoreName2Tot) ? player1 : player2;
                 MessageBox.Show(winner + " heeft gewonnen!");
             }
@@ -603,19 +608,23 @@ namespace SpellenScherm
 
         private void playSoundPositive()
         {
-            System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"C:\Users\johan\Downloads\soundeffects\positive\1.wav");
-            player.Play();
+            System.IO.Stream str = Memory.Properties.Resources.pair;
+            System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
+            snd.Play();
         }
 
         private void playSoundNegative()
         {
-            int soundNR = 0;
+            System.IO.Stream str = Memory.Properties.Resources.huh;
+            System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
+            snd.Play();
+        }
 
-            Random rnd = new Random();
-            soundNR = rnd.Next(1, 8);
-
-            System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"C:\Users\johan\Downloads\soundeffects\negative\" + soundNR + ".wav");
-            player.Play();
+        private void playSoundStupid()
+        {
+            System.IO.Stream str = Memory.Properties.Resources.fail;
+            System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
+            snd.Play();
         }
     }
 }
