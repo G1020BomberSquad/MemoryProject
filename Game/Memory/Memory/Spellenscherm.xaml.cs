@@ -43,10 +43,13 @@ namespace Memory
 
         private void start_Click(object sender, RoutedEventArgs e)
         {
-            if (Convert.ToString(folderDisplay.Content) == "/images")
+            if (Convert.ToString(folderDisplay.Content) == "Folder: /images")
             {
                 MemoryGrid.folder = "/images";
             }
+            setFolderBox.Visibility = Visibility.Collapsed;
+            setFolder.Visibility = Visibility.Collapsed;
+            
             grid = new MemoryGrid(GameGrid, 4, 4);
             start.Visibility = Visibility.Collapsed;
             turn1.Content = "Aan de beurt";
@@ -149,7 +152,7 @@ namespace Memory
             string folderSet = setFolderBox.Text;
             MemoryGrid.folder = folderSet;
 
-            folderDisplay.Content = folderSet;
+            folderDisplay.Content = "Folder: " + folderSet;
         }
     }
 }
