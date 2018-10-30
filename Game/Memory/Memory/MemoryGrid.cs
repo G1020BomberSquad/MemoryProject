@@ -9,7 +9,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.IO;
-using System.Text;
 
 namespace SpellenScherm
 {
@@ -19,8 +18,8 @@ namespace SpellenScherm
         private Grid grid;
 
         // creates 2 players
-        public static string player1 { get; set; }
-        public static string player2 { get; set; }
+        public static string Player1 { get; set; }
+        public static string Player2 { get; set; }
 
         // define the number of rows and cols
         private int rows, cols;
@@ -52,7 +51,7 @@ namespace SpellenScherm
         private Image Image2;
 
         // Folder where images are stored
-        public string folder = "images";
+        public static string folder { get; set; }
 
         /// <summary>
         /// Initialize the grid and assign the images to the grid
@@ -97,7 +96,7 @@ namespace SpellenScherm
                 {
                     // assign the back of the image
                     Image back = new Image();
-                    back.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.Relative));
+                    back.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.RelativeOrAbsolute));
 
                     // when one of the players click on a card
                     back.MouseDown += new System.Windows.Input.MouseButtonEventHandler(CardClick);
@@ -163,7 +162,7 @@ namespace SpellenScherm
                     else
                     {
                         random1.Add(Convert.ToString(imageNR));
-                        ImageSource source = new BitmapImage(new Uri(folder + "/" + imageNR + ".png", UriKind.Relative));
+                        ImageSource source = new BitmapImage(new Uri(folder + "/" + imageNR + ".png", UriKind.RelativeOrAbsolute));
                         images.Add(source);
 
                         if (i == 0)
@@ -218,7 +217,7 @@ namespace SpellenScherm
                     else
                     {
                         random2.Add(Convert.ToString(imageNR));
-                        ImageSource source = new BitmapImage(new Uri("images/" + imageNR + ".png", UriKind.Relative));
+                        ImageSource source = new BitmapImage(new Uri(folder + "/" + imageNR + ".png", UriKind.RelativeOrAbsolute));
                         images.Add(source);
 
                         string path = @"Save1.csv";
@@ -295,13 +294,13 @@ namespace SpellenScherm
             card.Source = front;
             numberOfClicks++;
 
-            checkCards(card);
+            CheckCards(card);
         }
 
         /// <summary>
         /// Shows who's turn it is under the players name
         /// </summary>
-        private void showTurn()
+        private void ShowTurn()
         {
             // if its player1's turn, show 'Aan de beurt' under their name
             if (turnName1 == true)
@@ -322,7 +321,7 @@ namespace SpellenScherm
         /// Grab the clicked card
         /// </summary>
         /// <param name="card">The card that has been clicked</param>
-        private void checkCards(Image card)
+        private void CheckCards(Image card)
         {
             this.card = card;
 
@@ -343,7 +342,7 @@ namespace SpellenScherm
             // when to cards have been clicked, check if they are a pair
             if (numberOfClicks == 2)
             {
-                checkPair(Image1, Image2);
+                CheckPair(Image1, Image2);
 
                 // reset the variables for the next turn
                 numberOfClicks = 0;
@@ -357,7 +356,7 @@ namespace SpellenScherm
         /// </summary>
         /// <param name="card1">The first card that has been clicked</param>
         /// <param name="card2">The second card that has been clicked</param>
-        public void checkPair(Image card1, Image card2)
+        public void CheckPair(Image card1, Image card2)
         {
             this.Image1 = card1;
             this.Image2 = card2;
@@ -365,8 +364,8 @@ namespace SpellenScherm
             // if 2 images are clicked, there are the same and the same card is not clicked twice
             if (Convert.ToString(card1.Source) == Convert.ToString(card2.Source) && (card1 != card2))
             {
-                playSoundPositive();
-                getPoint(card1, card2);
+                PlaySoundPositive();
+                GetPoint(card1, card2);
 
 
 
@@ -415,37 +414,37 @@ namespace SpellenScherm
             // if 2 images are clicked, they are not the same and the same card is not clicked twice
             else
             {
-                playSoundNegative();
-                resetCards(Image1, Image2);
+                PlaySoundNegative();
+                ResetCards(Image1, Image2);
             }   
 
-            checkTurn();
+            CheckTurn();
 
             // if the same card is clicked twice, the player keeps their turn
             if (Convert.ToString(card1.Source) == Convert.ToString(card2.Source) && (card1 == card2))
             {
-                playSoundStupid();
-                stayTurn();
+                PlaySoundStupid();
+                StayTurn();
             }
 
-            updateScore();
+            UpdateScore();
 
             // if all the pair have been found
             if (numberOfPairs == 8)
             {
-                checkWinner();
+                CheckWinner();
             }
 
             // reset the variables for the next turn
             scoreName1 = 0;
             scoreName2 = 0;
-            showTurn();
+            ShowTurn();
         }
 
         /// <summary>
         /// Gives turns
         /// </summary>
-        private void checkTurn()
+        private void CheckTurn()
         {
             // check if its player1's turn
             if (turnName1 == true)
@@ -482,7 +481,7 @@ namespace SpellenScherm
         /// <summary>
         /// When the same card is doubleclicked, the turn is kept
         /// </summary>
-        private void stayTurn()
+        private void StayTurn()
         {
             // check if its player1's turn, give the turn to player 2
             if (turnName1 == true)
@@ -501,7 +500,7 @@ namespace SpellenScherm
         /// <summary>
         /// Updates Score Labels
         /// </summary>
-        private void updateScore()
+        private void UpdateScore()
         {
             Spellenscherm.main.Score1 = "Score: " + scoreName1Tot;
             Spellenscherm.main.Score2 = "Score: " + scoreName2Tot;
@@ -512,7 +511,7 @@ namespace SpellenScherm
         /// </summary>
         /// <param name="card1">The first card that has been clicked</param>
         /// <param name="card2">The second card that has been clicked</param>
-        private async void getPoint(Image card1, Image card2)
+        private async void GetPoint(Image card1, Image card2)
         {
             string path = @"Save1.csv";
             string delimiter = ";";
@@ -556,8 +555,8 @@ namespace SpellenScherm
             await Task.Delay(300);
 
             // remove the cards from the board
-            card1.Source = new BitmapImage(new Uri("", UriKind.Relative));
-            card2.Source = new BitmapImage(new Uri("", UriKind.Relative));
+            card1.Source = new BitmapImage(new Uri("", UriKind.RelativeOrAbsolute));
+            card2.Source = new BitmapImage(new Uri("", UriKind.RelativeOrAbsolute));
 
             hasDelay = false;
         }
@@ -567,7 +566,7 @@ namespace SpellenScherm
         /// </summary>
         /// <param name="card1">The first card that has been clicked</param>
         /// <param name="card2">The second card that has been clicked</param>
-        private async void resetCards(Image card1, Image card2)
+        private async void ResetCards(Image card1, Image card2)
         {
             this.Image1 = card1;
             this.Image2 = card2;
@@ -577,15 +576,15 @@ namespace SpellenScherm
             await Task.Delay(1000);
 
             // show the back of the card again.
-            card1.Source = new BitmapImage(new Uri("/images/back.png", UriKind.Relative));
-            card2.Source = new BitmapImage(new Uri("/images/back.png", UriKind.Relative));
+            card1.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.RelativeOrAbsolute));
+            card2.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.RelativeOrAbsolute));
             hasDelay = false;
         }
 
         /// <summary>
         /// Announce the winner of the game
         /// </summary>
-        private void checkWinner()
+        private void CheckWinner()
         {
             // when the scores of player1 and player2 are the same
             if (scoreName1Tot == scoreName2Tot)
@@ -601,28 +600,28 @@ namespace SpellenScherm
                 System.IO.Stream str = Memory.Properties.Resources.win;
                 System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
                 snd.Play();
-                string winner = (scoreName1Tot > scoreName2Tot) ? player1 : player2;
+                string winner = (scoreName1Tot > scoreName2Tot) ? Player1 : Player2;
                 MessageBox.Show(winner + " heeft gewonnen!");
             }
         }
 
-        private void playSoundPositive()
+        private void PlaySoundPositive()
         {
             System.IO.Stream str = Memory.Properties.Resources.pair;
             System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
             snd.Play();
         }
 
-        private void playSoundNegative()
+        private void PlaySoundNegative()
         {
-            System.IO.Stream str = Memory.Properties.Resources.huh;
+            System.IO.Stream str = Memory.Properties.Resources.fail;
             System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
             snd.Play();
         }
 
-        private void playSoundStupid()
+        private void PlaySoundStupid()
         {
-            System.IO.Stream str = Memory.Properties.Resources.fail;
+            System.IO.Stream str = Memory.Properties.Resources.huh;
             System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
             snd.Play();
         }

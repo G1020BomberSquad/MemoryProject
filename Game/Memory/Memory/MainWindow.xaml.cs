@@ -23,29 +23,32 @@ namespace Memory
         public MainWindow()
         {
             InitializeComponent();
+            System.IO.Stream str = Memory.Properties.Resources.lobby;
+            System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
+            snd.Play();
         }
 
-        private void newGame_Click(object sender, RoutedEventArgs e)
+        private void NewGame_Click(object sender, RoutedEventArgs e)
         {
             new Spellenscherm().ShowDialog();
         }
 
-        private void hervatten_Click(object sender, RoutedEventArgs e)
+        private void Hervatten_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void highscore_Click(object sender, RoutedEventArgs e)
+        private void Highscore_Click(object sender, RoutedEventArgs e)
         {
             new Highscores().ShowDialog();
         }
 
-        private void themas_Click(object sender, RoutedEventArgs e)
+        private void Themas_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void close_Click(object sender, RoutedEventArgs e)
+        private void Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

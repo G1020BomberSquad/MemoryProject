@@ -43,6 +43,10 @@ namespace Memory
 
         private void start_Click(object sender, RoutedEventArgs e)
         {
+            if (Convert.ToString(folderDisplay.Content) == "/images")
+            {
+                MemoryGrid.folder = "/images";
+            }
             grid = new MemoryGrid(GameGrid, 4, 4);
             start.Visibility = Visibility.Collapsed;
             turn1.Content = "Aan de beurt";
@@ -53,8 +57,8 @@ namespace Memory
             string userName1 = nameEnter1.Text;
             string userName2 = nameEnter2.Text;
 
-             MemoryGrid.player1 = userName1;
-             MemoryGrid.player2 = userName2;
+             MemoryGrid.Player1 = userName1;
+             MemoryGrid.Player2 = userName2;
 
             name1.Content = userName1;
             name2.Content = userName2;
@@ -138,6 +142,14 @@ namespace Memory
         {
             get { return turn2.Content.ToString(); }
             set { Dispatcher.Invoke(new Action(() => { turn2.Content = value; })); }
+        }
+
+        private void setFolder_Click(object sender, RoutedEventArgs e)
+        {
+            string folderSet = setFolderBox.Text;
+            MemoryGrid.folder = folderSet;
+
+            folderDisplay.Content = folderSet;
         }
     }
 }

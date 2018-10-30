@@ -130,6 +130,7 @@
     <Content Include="sounds\even.wav" />
     <Content Include="sounds\fail.wav" />
     <Content Include="sounds\huh.wav" />
+    <None Include="sounds\lobby.wav" />
     <Content Include="sounds\pair.wav" />
     <Content Include="sounds\win.wav" />
   </ItemGroup>
