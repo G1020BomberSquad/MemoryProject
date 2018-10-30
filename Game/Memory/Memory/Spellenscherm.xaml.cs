@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace Memory
 {
@@ -22,11 +23,17 @@ namespace Memory
     public partial class Spellenscherm : Window
     {
         private MemoryGrid grid;
+        private string path = @"Save1.csv";
+        public static string delimiter = ";";
 
         public Spellenscherm()
         {
             InitializeComponent();
             main = this;
+            if (!File.Exists(path))
+            {
+                File.WriteAllText(path, "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine);
+            }
         }
 
         private void menu_Click(object sender, RoutedEventArgs e)
@@ -53,6 +60,23 @@ namespace Memory
             name2.Content = userName2;
             set1.Visibility = Visibility.Collapsed;
             set2.Visibility = Visibility.Collapsed;
+
+            string path = @"Save1.csv";
+
+            var reader = new StreamReader(File.OpenRead(path));
+            var data = new List<List<string>>();
+
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(';');
+
+                data.Add(new List<String> { values[0], values[1], values[2], values[3]
+                        });
+            }
+            reader.Close();
+
+            File.WriteAllText(path, userName1 + delimiter + userName2 + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine);
         }
 
         private void SaveGame_Click(object sender, RoutedEventArgs e)

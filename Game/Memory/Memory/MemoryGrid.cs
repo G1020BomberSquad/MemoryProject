@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.IO;
+using System.Text;
 
 namespace SpellenScherm
 {
@@ -119,7 +121,23 @@ namespace SpellenScherm
             // two lists that keep track of the used images, so there are only 2 cards of the sort
             List<string> random1 = new List<string>();
             List<string> random2 = new List<string>();
-
+                      
+            string C1 = null;
+            string C2 = null;
+            string C3 = null;
+            string C4 = null;
+            string C5 = null;
+            string C6 = null;
+            string C7 = null;
+            string C8 = null;
+            string C9 = null;
+            string C10 = null;
+            string C11 = null;
+            string C12 = null;
+            string C13 = null;
+            string C14 = null;
+            string C15 = null;
+            string C16 = null;
 
             // randomizer
             for (int i = 0; i < 16; i++)
@@ -144,6 +162,39 @@ namespace SpellenScherm
                         random1.Add(Convert.ToString(imageNR));
                         ImageSource source = new BitmapImage(new Uri("images/" + imageNR + ".png", UriKind.Relative));
                         images.Add(source);
+
+                        if (i == 0)
+                        {
+                            C1 = Convert.ToString(imageNR);
+                        }
+                        if (i == 1)
+                        {
+                            C2 = Convert.ToString(imageNR);
+                        }
+                        if (i == 2)
+                        {
+                            C3 = Convert.ToString(imageNR);
+                        }
+                        if (i == 3)
+                        {
+                            C4 = Convert.ToString(imageNR);
+                        }
+                        if (i == 4)
+                        {
+                            C5 = Convert.ToString(imageNR);
+                        }
+                        if (i == 5)
+                        {
+                            C6 = Convert.ToString(imageNR);
+                        }
+                        if (i == 6)
+                        {
+                            C7 = Convert.ToString(imageNR);
+                        }
+                        if (i == 7)
+                        {
+                            C8 = Convert.ToString(imageNR);
+                        }
                     }
                 }
                 if (i >= 8)
@@ -166,6 +217,59 @@ namespace SpellenScherm
                         random2.Add(Convert.ToString(imageNR));
                         ImageSource source = new BitmapImage(new Uri("images/" + imageNR + ".png", UriKind.Relative));
                         images.Add(source);
+
+                        string path = @"Save1.csv";
+
+                        var reader = new StreamReader(File.OpenRead(path));
+                        var data = new List<List<string>>();
+
+                        while (!reader.EndOfStream)
+                        {
+                            var line = reader.ReadLine();
+                            var values = line.Split(';');
+
+                            data.Add(new List<String> { values[0], values[1], values[2], values[3]
+                        });
+                        }
+                        reader.Close();
+
+                        string delimiter = ";";
+
+                        if (i == 8)
+                        {
+                            C9 = Convert.ToString(imageNR);
+                        }
+                        if (i == 9)
+                        {
+                            C10 = Convert.ToString(imageNR);
+                        }
+                        if (i == 10)
+                        {
+                            C11 = Convert.ToString(imageNR);
+                        }
+                        if (i == 11)
+                        {
+                            C12 = Convert.ToString(imageNR);
+                        }
+                        if (i == 12)
+                        {
+                            C13 = Convert.ToString(imageNR);
+                        }
+                        if (i == 13)
+                        {
+                            C14 = Convert.ToString(imageNR);
+                        }
+                        if (i == 14)
+                        {
+                            C15 = Convert.ToString(imageNR);
+                        }
+                        if (i == 15)
+                        {
+                            C16 = Convert.ToString(imageNR);
+                        }
+
+
+                        File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + "0" + delimiter + "0" + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + C1 + delimiter + C2 + delimiter + C3 + delimiter + C4 + Environment.NewLine + C5 + delimiter + C6 + delimiter + C7 + delimiter + C8 + Environment.NewLine + C9 + delimiter + C10 + delimiter + C11 + delimiter + C12 + Environment.NewLine + C13 + delimiter + C14 + delimiter + C15 + delimiter + C16 + Environment.NewLine);
                     }
                 }
             }
@@ -260,6 +364,50 @@ namespace SpellenScherm
             {
                 playSoundPositive();
                 getPoint(card1, card2);
+
+
+
+                string path = @"Save1.csv";
+                string cardnr = null;
+
+                var reader = new StreamReader(File.OpenRead(path));
+                var data = new List<List<string>>();
+
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(';');
+
+                    data.Add(new List<String> { values[0], values[1], values[2], values[3]
+                        });
+                }
+                reader.Close();
+
+
+                for (int b = 1; b < 9; b++)
+                {
+                    if (Convert.ToString(card1.Source) == "pack://application:,,,/Memory;component/images/" + b + ".png")
+                    {
+                        cardnr = Convert.ToString(b);
+                    }
+                }
+
+                string delimiter = ";";
+                int i;
+                int x;
+                for (i = 2; i < 6; i++)
+                {
+                    for (x = 0; x < 4; x++)
+                    {
+                        var test = data[i][x];
+                        if (data[i][x] == cardnr)
+                        {
+                            data[i][x] = null;
+                        }
+                    }
+                }
+
+                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine);
             }
             // if 2 images are clicked, they are not the same and the same card is not clicked twice
             else
@@ -363,17 +511,41 @@ namespace SpellenScherm
         /// <param name="card2">The second card that has been clicked</param>
         private async void getPoint(Image card1, Image card2)
         {
+            string path = @"Save1.csv";
+            string delimiter = ";";
+
+            var reader = new StreamReader(File.OpenRead(path));
+            var data = new List<List<string>>();
+
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(';');
+
+                data.Add(new List<String> { values[0], values[1], values[2], values[3]
+                        });
+            }
+            reader.Close();
+
             // if its player1's turn, increase their score
             if (turnName1 == true)
             {
                 numberOfPairs++;
                 scoreName1++;
+
+                data[1][0] = Convert.ToString(Convert.ToInt32(data[1][0]) + 1);
+
+                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine);
             }
             // if its player2's turn, increase their score
             else if (turnName2 == true)
             {
                 numberOfPairs++;
                 scoreName2++;
+
+                data[1][1] = Convert.ToString(Convert.ToInt32(data[1][1]) + 1);
+
+                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine);
             }
 
             // wait a third of a second, show the second card first
