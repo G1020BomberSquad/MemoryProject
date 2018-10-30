@@ -49,6 +49,7 @@ namespace Memory
             }
             setFolderBox.Visibility = Visibility.Collapsed;
             setFolder.Visibility = Visibility.Collapsed;
+            folderDisplay.Width = 1058;
             
             grid = new MemoryGrid(GameGrid, 4, 4);
             start.Visibility = Visibility.Collapsed;
