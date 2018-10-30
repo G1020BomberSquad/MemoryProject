@@ -32,7 +32,7 @@ namespace Memory
             main = this;
             if (!File.Exists(path))
             {
-                File.WriteAllText(path, "ready");
+                File.WriteAllText(path, "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine);
             }
         }
 
