@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace SpellenScherm
 {
@@ -586,6 +587,9 @@ namespace SpellenScherm
         /// </summary>
         private void CheckWinner()
         {
+            SetHighscore();
+
+
             // when the scores of player1 and player2 are the same
             if (scoreName1Tot == scoreName2Tot)
             {
@@ -624,6 +628,127 @@ namespace SpellenScherm
             System.IO.Stream str = Memory.Properties.Resources.huh;
             System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
             snd.Play();
+        }
+
+        private void SetHighscore()
+        {
+            int OldHighscore1 = Memory.Properties.Settings.Default.highscore1;
+            int OldHighscore2 = Memory.Properties.Settings.Default.highscore2;
+            int OldHighscore3 = Memory.Properties.Settings.Default.highscore3;
+            int OldHighscore4 = Memory.Properties.Settings.Default.highscore4;
+            int OldHighscore5 = Memory.Properties.Settings.Default.highscore5;
+
+            if (scoreName1Tot > OldHighscore1 && scoreName1Tot != OldHighscore1)
+            {
+                Memory.Properties.Settings.Default.highscore2 = Memory.Properties.Settings.Default.highscore1;
+                Memory.Properties.Settings.Default.highscore3 = Memory.Properties.Settings.Default.highscore2;
+                Memory.Properties.Settings.Default.highscore4 = Memory.Properties.Settings.Default.highscore3;
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name2 = Memory.Properties.Settings.Default.name1;
+                Memory.Properties.Settings.Default.name3 = Memory.Properties.Settings.Default.name2;
+                Memory.Properties.Settings.Default.name4 = Memory.Properties.Settings.Default.name3;
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore1 = scoreName1Tot;
+                Memory.Properties.Settings.Default.name1 = Player1;
+            }
+            else if (scoreName1Tot > OldHighscore2 && scoreName1Tot != OldHighscore2)
+            {
+                Memory.Properties.Settings.Default.highscore3 = Memory.Properties.Settings.Default.highscore2;
+                Memory.Properties.Settings.Default.highscore4 = Memory.Properties.Settings.Default.highscore3;
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name3 = Memory.Properties.Settings.Default.name2;
+                Memory.Properties.Settings.Default.name4 = Memory.Properties.Settings.Default.name3;
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore2 = scoreName1Tot;
+                Memory.Properties.Settings.Default.name2 = Player1;
+            }
+            else if (scoreName1Tot > OldHighscore3 && scoreName1Tot != OldHighscore3)
+            {
+                Memory.Properties.Settings.Default.highscore4 = Memory.Properties.Settings.Default.highscore3;
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name4 = Memory.Properties.Settings.Default.name3;
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore3 = scoreName1Tot;
+                Memory.Properties.Settings.Default.name3 = Player1;
+            }
+            else if (scoreName1Tot > OldHighscore4 && scoreName1Tot != OldHighscore4)
+            {
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore4 = scoreName1Tot;
+                Memory.Properties.Settings.Default.name4 = Player1;
+            }
+            else if (scoreName1Tot > OldHighscore5 && scoreName1Tot != OldHighscore5)
+            {
+                Memory.Properties.Settings.Default.highscore5 = scoreName1Tot;
+                Memory.Properties.Settings.Default.name5 = Player1;
+            }
+
+
+
+            if (scoreName2Tot > OldHighscore1 && scoreName2Tot != OldHighscore1)
+            {
+                Memory.Properties.Settings.Default.highscore2 = Memory.Properties.Settings.Default.highscore1;
+                Memory.Properties.Settings.Default.highscore3 = Memory.Properties.Settings.Default.highscore2;
+                Memory.Properties.Settings.Default.highscore4 = Memory.Properties.Settings.Default.highscore3;
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name2 = Memory.Properties.Settings.Default.name1;
+                Memory.Properties.Settings.Default.name3 = Memory.Properties.Settings.Default.name2;
+                Memory.Properties.Settings.Default.name4 = Memory.Properties.Settings.Default.name3;
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore1 = scoreName2Tot;
+                Memory.Properties.Settings.Default.name1 = Player2;
+            }
+            else if (scoreName2Tot > OldHighscore2 && scoreName2Tot != OldHighscore2)
+            {
+                Memory.Properties.Settings.Default.highscore3 = Memory.Properties.Settings.Default.highscore2;
+                Memory.Properties.Settings.Default.highscore4 = Memory.Properties.Settings.Default.highscore3;
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name3 = Memory.Properties.Settings.Default.name2;
+                Memory.Properties.Settings.Default.name4 = Memory.Properties.Settings.Default.name3;
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore2 = scoreName2Tot;
+                Memory.Properties.Settings.Default.name2 = Player2;
+            }
+            else if (scoreName2Tot > OldHighscore3 && scoreName2Tot != OldHighscore3)
+            {
+                Memory.Properties.Settings.Default.highscore4 = Memory.Properties.Settings.Default.highscore3;
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name4 = Memory.Properties.Settings.Default.name3;
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore3 = scoreName2Tot;
+                Memory.Properties.Settings.Default.name3 = Player2;
+            }
+            else if (scoreName2Tot > OldHighscore4 && scoreName2Tot != OldHighscore4)
+            {
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore4 = scoreName2Tot;
+                Memory.Properties.Settings.Default.name4 = Player2;
+            }
+            else if (scoreName2Tot > OldHighscore5 && scoreName2Tot != OldHighscore5)
+            {
+                Memory.Properties.Settings.Default.highscore5 = scoreName2Tot;
+                Memory.Properties.Settings.Default.name5 = Player2;
+            }
+            Memory.Properties.Settings.Default.Save();
+            Memory.Properties.Settings.Default.Reload();
         }
     }
 }
