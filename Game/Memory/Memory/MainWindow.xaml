@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Memory"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800">A
     <Grid Background="Aqua">
         <Label Content="Memory" HorizontalAlignment="Left"  Height="109" Margin="236,24,0,0" VerticalAlignment="Top" Width="295" FontSize="72" Foreground="HotPink"/>
         <Button x:Name="newGame" Content="Nieuw spel" HorizontalAlignment="Left" Height="39" Margin="291,168,0,0" VerticalAlignment="Top" Width="202" BorderBrush="#FFEA0B93" Click="newGame_Click"/>

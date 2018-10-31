@@ -6,7 +6,12 @@
         xmlns:local="clr-namespace:Hoofdscherm"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Background="#FF18C3A2">
+        <Label Content="            Memory" HorizontalAlignment="Left"  Height="109" Margin="10,26,0,0" VerticalAlignment="Top" Width="774" FontSize="72" Foreground="#FFB10BEA"/>
+        <Button Content="Nieuw spel" Click="Button_Click" HorizontalAlignment="Left" Height="39" Margin="291,168,0,0" VerticalAlignment="Top" Width="202" BorderBrush="#FFEA0B93"/>
+        <Button Content="Spel Hervatten" HorizontalAlignment="Left" Height="39" Margin="291,228,0,0" VerticalAlignment="Top" Width="202" BorderBrush="#FFEA0B93"/>
+        <Button Content="Thema's kiezen" HorizontalAlignment="Left" Height="39" Margin="291,348,0,0" VerticalAlignment="Top" Width="202" BorderBrush="#FFEA0B93"/>
+        <Button Content="Aan/Uit" HorizontalAlignment="Left" Height="32" Margin="741,0,0,0" VerticalAlignment="Top" Width="43" Click="Button_Click"/>
+        <Button Content="Button" HorizontalAlignment="Left" Height="41" Margin="291,284,0,0" VerticalAlignment="Top" Width="202"/>
     </Grid>
 </Window>

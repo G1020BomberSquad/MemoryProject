@@ -42,7 +42,7 @@ namespace Memory
 
         private void themas_Click(object sender, RoutedEventArgs e)
         {
-
+            new Thema().ShowDialog();
         }
     }
 }
