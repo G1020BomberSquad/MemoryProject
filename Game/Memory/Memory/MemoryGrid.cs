@@ -124,7 +124,8 @@ namespace SpellenScherm
             // two lists that keep track of the used images, so there are only 2 cards of the sort
             List<string> random1 = new List<string>();
             List<string> random2 = new List<string>();
-                      
+            
+            // variables used for saving the grind into a savefile
             string C1 = null;
             string C2 = null;
             string C3 = null;
@@ -166,6 +167,7 @@ namespace SpellenScherm
                         ImageSource source = new BitmapImage(new Uri(folder + "/" + imageNR + ".png", UriKind.RelativeOrAbsolute));
                         images.Add(source);
 
+                        //places the randomly picked cards into the variables
                         if (i == 0)
                         {
                             C1 = Convert.ToString(imageNR);
@@ -221,6 +223,7 @@ namespace SpellenScherm
                         ImageSource source = new BitmapImage(new Uri(folder + "/" + imageNR + ".png", UriKind.RelativeOrAbsolute));
                         images.Add(source);
 
+                        //reads savefile
                         string path = @"Save1.csv";
 
                         var reader = new StreamReader(File.OpenRead(path));
@@ -238,6 +241,7 @@ namespace SpellenScherm
 
                         string delimiter = ";";
 
+                        //places the randomly picked cards into variables
                         if (i == 8)
                         {
                             C9 = Convert.ToString(imageNR);
@@ -271,8 +275,8 @@ namespace SpellenScherm
                             C16 = Convert.ToString(imageNR);
                         }
 
-
-                        File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + "0" + delimiter + "0" + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + C1 + delimiter + C2 + delimiter + C3 + delimiter + C4 + Environment.NewLine + C5 + delimiter + C6 + delimiter + C7 + delimiter + C8 + Environment.NewLine + C9 + delimiter + C10 + delimiter + C11 + delimiter + C12 + Environment.NewLine + C13 + delimiter + C14 + delimiter + C15 + delimiter + C16 + Environment.NewLine);
+                        //writes the variables into the savefile
+                        File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + "0" + delimiter + "0" + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + C1 + delimiter + C2 + delimiter + C3 + delimiter + C4 + Environment.NewLine + C5 + delimiter + C6 + delimiter + C7 + delimiter + C8 + Environment.NewLine + C9 + delimiter + C10 + delimiter + C11 + delimiter + C12 + Environment.NewLine + C13 + delimiter + C14 + delimiter + C15 + delimiter + C16 + Environment.NewLine + data[6][0]);
                     }
                 }
             }
@@ -369,7 +373,7 @@ namespace SpellenScherm
                 GetPoint(card1, card2);
 
 
-
+                //reads savefile
                 string path = @"Save1.csv";
                 string cardnr = null;
 
@@ -386,15 +390,16 @@ namespace SpellenScherm
                 }
                 reader.Close();
 
-
+                //turns the card's name into a number
                 for (int b = 1; b < 9; b++)
                 {
-                    if (Convert.ToString(card1.Source) == "pack://application:,,,/Memory;component/images/" + b + ".png")
+                    if (Convert.ToString(card1.Source).Contains(b + ".png"))
                     {
                         cardnr = Convert.ToString(b);
                     }
                 }
 
+                //removes the 2 clicked cards from the savefile
                 string delimiter = ";";
                 int i;
                 int x;
@@ -410,7 +415,7 @@ namespace SpellenScherm
                     }
                 }
 
-                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine);
+                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine + data[6][0]);
             }
             // if 2 images are clicked, they are not the same and the same card is not clicked twice
             else
@@ -447,6 +452,23 @@ namespace SpellenScherm
         /// </summary>
         private void CheckTurn()
         {
+            //reads savefile
+            string path = @"Save1.csv";
+            string delimiter = ";";
+
+            var reader = new StreamReader(File.OpenRead(path));
+            var data = new List<List<string>>();
+
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(';');
+
+                data.Add(new List<String> { values[0], values[1], values[2], values[3]
+                        });
+            }
+            reader.Close();
+
             // check if its player1's turn
             if (turnName1 == true)
             {
@@ -460,6 +482,8 @@ namespace SpellenScherm
                 {
                     turnName1 = false;
                     turnName2 = true;
+
+                    File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine + "P2");
                 }
             }
             // check if its player2's turn
@@ -475,6 +499,8 @@ namespace SpellenScherm
                 {
                     turnName2 = false;
                     turnName1 = true;
+
+                    File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine + "P1");
                 }
             }
         }
@@ -514,6 +540,7 @@ namespace SpellenScherm
         /// <param name="card2">The second card that has been clicked</param>
         private async void GetPoint(Image card1, Image card2)
         {
+            //reads savefile
             string path = @"Save1.csv";
             string delimiter = ";";
 
@@ -538,7 +565,7 @@ namespace SpellenScherm
 
                 data[1][0] = Convert.ToString(Convert.ToInt32(data[1][0]) + 1);
 
-                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine);
+                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine + data[6][0]);
             }
             // if its player2's turn, increase their score
             else if (turnName2 == true)
@@ -548,7 +575,7 @@ namespace SpellenScherm
 
                 data[1][1] = Convert.ToString(Convert.ToInt32(data[1][1]) + 1);
 
-                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine);
+                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine + data[6][0]);
             }
 
             // wait a third of a second, show the second card first
