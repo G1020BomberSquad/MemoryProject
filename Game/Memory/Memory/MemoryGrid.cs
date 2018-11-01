@@ -1,6 +1,7 @@
-﻿using Memory;
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace SpellenScherm
+namespace Memory
 {
     public class MemoryGrid
     {
@@ -29,8 +30,8 @@ namespace SpellenScherm
         static int numberOfClicks = 0;
 
         // the total scores which will be displayed to the players
-        static int scoreName1Tot;
-        static int scoreName2Tot;
+        public static int scoreName1Tot { get; set; }
+        public static int scoreName2Tot { get; set; }
 
         // variables to count if there is made a new point, and to make it easier to keep track of the turns
         static int scoreName1;
@@ -100,6 +101,25 @@ namespace SpellenScherm
             if (load == 1)
             {
                 List<ImageSource> images = GetLoadedImagesList();
+                for (int row = 0; row < rows; row++)
+                {
+                    for (int col = 0; col < cols; col++)
+                    {
+                        // assign the back of the image
+                        Image back = new Image();
+                        back.Source = new BitmapImage(new Uri("/images/back.png", UriKind.Relative));
+
+                        // when one of the players click on a card
+                        back.MouseDown += new System.Windows.Input.MouseButtonEventHandler(CardClick);
+
+                        // set the cards
+                        back.Tag = images.First();
+                        images.RemoveAt(0);
+                        Grid.SetColumn(back, col);
+                        Grid.SetRow(back, row);
+                        grid.Children.Add(back);
+                    }
+                }
             }
             else
             {
@@ -114,29 +134,31 @@ namespace SpellenScherm
                     Image back = new Image();
                     back.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.RelativeOrAbsolute));
 
-                    // when one of the players click on a card
-                    back.MouseDown += new System.Windows.Input.MouseButtonEventHandler(CardClick);
+                        // when one of the players click on a card
+                        back.MouseDown += new System.Windows.Input.MouseButtonEventHandler(CardClick);
 
-                    // set the cards
-                    back.Tag = images.First();
-                    images.RemoveAt(0);
-                    Grid.SetColumn(back, col);
-                    Grid.SetRow(back, row);
-                    grid.Children.Add(back);
+                        // set the cards
+                        back.Tag = images.First();
+                        images.RemoveAt(0);
+                        Grid.SetColumn(back, col);
+                        Grid.SetRow(back, row);
+                        grid.Children.Add(back);
+                    }
                 }
             }
         }
 
-        private List<ImageSource> GetLoadedImagesList()
+        private string[,] saveDat;
+        public List<ImageSource> GetLoadedImagesList()
         {
             List<ImageSource> images = new List<ImageSource>();
-            resultVals = LoadSave.GetSavefileData();
+            saveDat = GetSavefileData();
 
-            player1 = resultVals[0, 0];
-            player2 = resultVals[0, 1];
-            scoreName1Tot = Convert.ToInt32(resultVals[1, 0]);
-            scoreName2Tot = Convert.ToInt32(resultVals[1, 1]);
-            if (resultVals[6, 0] == "P1")
+            player1 = saveDat[0, 0];
+            player2 = saveDat[0, 1];
+            scoreName1Tot = Convert.ToInt32(saveDat[1, 0]);
+            scoreName2Tot = Convert.ToInt32(saveDat[1, 1]);
+            if (saveDat[6, 0] == "P1")
             {
                 turnName1 = true;
                 turnName2 = false;
@@ -152,12 +174,53 @@ namespace SpellenScherm
             {
                 for (int colVals = 0; colVals < 4; colVals++)
                 {
-                    string nr = Convert.ToString(resultVals[rowVals, colVals]);
+                    string nr = Convert.ToString(saveDat[rowVals, colVals]);
                     ImageSource source = new BitmapImage(new Uri("images/" + nr + ".png", UriKind.Relative));
                     images.Add(source);
                 }
             }
             return images;
+        }
+
+        private static string fileData = "";
+        public static string[,] resultVals;
+        public static string[,] GetSavefileData()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "saves");
+            if (openFileDialog.ShowDialog() == true)
+            {
+                fileData = File.ReadAllText(openFileDialog.FileName);
+
+                fileData = fileData.Replace('\n', '\r');
+
+                //Split lines into string
+                string[] lines = fileData.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+                //Get total rows and columns
+                int totalRows = lines.Length;
+                int totalCols = lines[0].Split(';').Length;
+
+                //Make new 2d array
+                resultVals = new string[totalRows, totalCols];
+
+                //Place data in array
+                for (int row = 0; row < totalRows; row++)
+                {
+                    string[] line_r = lines[row].Split(';');
+
+                    for (int col = 0; col < totalCols; col++)
+                    {
+                        resultVals[row, col] = line_r[col];
+                    }
+                }
+
+                return resultVals;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
