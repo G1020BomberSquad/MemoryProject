@@ -26,7 +26,7 @@ namespace Memory
         private string path = @"Save1.csv";
         public static string delimiter = ";";
 
-        public Spellenscherm()
+        public Spellenscherm(int load)
         {
             InitializeComponent();
             main = this;
@@ -34,6 +34,20 @@ namespace Memory
             {
                 File.WriteAllText(path, "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready");
             }
+        }
+            if (load == 1)
+            {
+                load_Game();
+            }
+        }
+
+        private void load_Game()
+        {
+            start.Visibility = Visibility.Collapsed;
+            set1.Visibility = Visibility.Collapsed;
+            set2.Visibility = Visibility.Collapsed;
+            grid = new MemoryGrid(GameGrid, 4, 4, 1);
+            
         }
 
         /// <summary>
@@ -64,6 +78,7 @@ namespace Memory
             
             // initialize grid
             grid = new MemoryGrid(GameGrid, 4, 4);
+            grid = new MemoryGrid(GameGrid, 4, 4, 0);
             start.Visibility = Visibility.Collapsed;
             turn1.Content = "Aan de beurt";
         }

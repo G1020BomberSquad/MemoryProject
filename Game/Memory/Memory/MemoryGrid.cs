@@ -60,14 +60,21 @@ namespace SpellenScherm
         /// <param name="grid">Defines the grid</param>
         /// <param name="rows">How many rows there are</param>
         /// <param name="cols">How many cols there are</param>
-        public MemoryGrid(Grid grid, int rows, int cols)
+        public MemoryGrid(Grid grid, int rows, int cols, int load)
         {
             this.grid = grid;
             this.rows = rows;
             this.cols = cols;
 
             InitializeGrid();
-            AddImages();
+            if (load == 1)
+            {
+                AddImages(1);
+            }
+            else
+            {
+                AddImages(0);
+            }
         }
 
         /// <summary>
@@ -88,9 +95,17 @@ namespace SpellenScherm
         /// <summary>
         /// Adds images to the grid
         /// </summary>
-        private void AddImages()
+        private void AddImages(int load)
         {
-            List<ImageSource> images = GetImagesList();
+            if (load == 1)
+            {
+                List<ImageSource> images = GetLoadedImagesList();
+            }
+            else
+            {
+                List<ImageSource> images = GetImagesList();
+            }
+            
             for (int row = 0; row < rows; row++)
             {
                 for (int col = 0; col < cols; col++)
@@ -110,6 +125,39 @@ namespace SpellenScherm
                     grid.Children.Add(back);
                 }
             }
+        }
+
+        private List<ImageSource> GetLoadedImagesList()
+        {
+            List<ImageSource> images = new List<ImageSource>();
+            resultVals = LoadSave.GetSavefileData();
+
+            player1 = resultVals[0, 0];
+            player2 = resultVals[0, 1];
+            scoreName1Tot = Convert.ToInt32(resultVals[1, 0]);
+            scoreName2Tot = Convert.ToInt32(resultVals[1, 1]);
+            if (resultVals[6, 0] == "P1")
+            {
+                turnName1 = true;
+                turnName2 = false;
+            }
+            else
+            {
+                turnName1 = false;
+                turnName2 = true;
+            }
+
+
+            for (int rowVals = 2; rowVals < 6; rowVals++)
+            {
+                for (int colVals = 0; colVals < 4; colVals++)
+                {
+                    string nr = Convert.ToString(resultVals[rowVals, colVals]);
+                    ImageSource source = new BitmapImage(new Uri("images/" + nr + ".png", UriKind.Relative));
+                    images.Add(source);
+                }
+            }
+            return images;
         }
 
         /// <summary>

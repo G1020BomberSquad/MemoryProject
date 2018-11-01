@@ -11,6 +11,7 @@ namespace Memory
     class LoadSave
     {
         private static string fileData = "";
+        public static string[,] resultVals;
         public static string[,] GetSavefileData()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -29,7 +30,7 @@ namespace Memory
                 int totalCols = lines[0].Split(';').Length;
 
                 //Make new 2d array
-                string[,] resultVals = new string[totalRows, totalCols];
+                resultVals = new string[totalRows, totalCols];
 
                 //Place data in array
                 for (int row = 0; row < totalRows; row++)
