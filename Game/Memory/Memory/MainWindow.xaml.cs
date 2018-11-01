@@ -28,13 +28,13 @@ namespace Memory
 
         private void newGame_Click(object sender, RoutedEventArgs e)
         {
-            new Spellenscherm().ShowDialog();
+            new Spellenscherm(0).ShowDialog();
         }
 
         private void hervatten_Click(object sender, RoutedEventArgs e)
         {
-            LoadSave.GetSavefileData();
-
+            int load = 1;
+            new Spellenscherm(load).ShowDialog();
         }
 
         private void highscore_Click(object sender, RoutedEventArgs e)

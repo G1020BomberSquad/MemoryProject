@@ -23,10 +23,23 @@ namespace Memory
     {
         private MemoryGrid grid;
 
-        public Spellenscherm()
+        public Spellenscherm(int load)
         {
             InitializeComponent();
             main = this;
+            if (load == 1)
+            {
+                load_Game();
+            }
+        }
+
+        private void load_Game()
+        {
+            start.Visibility = Visibility.Collapsed;
+            set1.Visibility = Visibility.Collapsed;
+            set2.Visibility = Visibility.Collapsed;
+            grid = new MemoryGrid(GameGrid, 4, 4, 1);
+            
         }
 
         private void menu_Click(object sender, RoutedEventArgs e)
@@ -36,7 +49,7 @@ namespace Memory
 
         private void start_Click(object sender, RoutedEventArgs e)
         {
-            grid = new MemoryGrid(GameGrid, 4, 4);
+            grid = new MemoryGrid(GameGrid, 4, 4, 0);
             start.Visibility = Visibility.Collapsed;
             turn1.Content = "Aan de beurt";
         }
