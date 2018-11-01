@@ -29,6 +29,23 @@ namespace Memory
         {
             InitializeComponent();
             main = this;
+            if (load == 1)
+            {
+                load_Game();
+            }
+        }
+
+        private void load_Game()
+        {
+            start.Visibility = Visibility.Collapsed;
+            set1.Visibility = Visibility.Collapsed;
+            set2.Visibility = Visibility.Collapsed;
+            grid = new MemoryGrid(GameGrid, 4, 4, 1);
+            name1.Content = MemoryGrid.player1;
+            name2.Content = MemoryGrid.player2;
+            scoreName1.Content = MemoryGrid.scoreName1Tot;
+            scoreName2.Content = MemoryGrid.scoreName2Tot;
+        }
             if (!File.Exists(path))
             {
                 File.WriteAllText(path, "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready");
