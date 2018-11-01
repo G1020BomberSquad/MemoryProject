@@ -24,30 +24,58 @@ namespace Memory
         public MainWindow()
         {
             InitializeComponent();
+            System.IO.Stream str = Memory.Properties.Resources.lobby;
+            System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
+            snd.Play();
         }
 
-        private void newGame_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Open a new gamewindow
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NewGame_Click(object sender, RoutedEventArgs e)
         {
             new Spellenscherm(0).ShowDialog();
         }
 
-        private void hervatten_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Resume a game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Hervatten_Click(object sender, RoutedEventArgs e)
         {
             int load = 1;
             new Spellenscherm(load).ShowDialog();
         }
 
-        private void highscore_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Show the highscores window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Highscore_Click(object sender, RoutedEventArgs e)
+        {
+            new Highscores().ShowDialog();
+        }
+
+        /// <summary>
+        /// Set the themes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Themas_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void themas_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void close_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Close the game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
