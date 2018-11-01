@@ -36,13 +36,24 @@ namespace Memory
             }
         }
 
+        /// <summary>
+        /// Show the menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void menu_Click(object sender, RoutedEventArgs e)
         {
             menuBar.Visibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// Start the game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void start_Click(object sender, RoutedEventArgs e)
         {
+            // check if a custom folder has been set
             if (Convert.ToString(folderDisplay.Content) == "Folder: /images")
             {
                 MemoryGrid.folder = "/images";
@@ -51,11 +62,17 @@ namespace Memory
             setFolder.Visibility = Visibility.Collapsed;
             folderDisplay.Width = 1058;
             
+            // initialize grid
             grid = new MemoryGrid(GameGrid, 4, 4);
             start.Visibility = Visibility.Collapsed;
             turn1.Content = "Aan de beurt";
         }
 
+        /// <summary>
+        /// Set the players name
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void setNames_Click(object sender, RoutedEventArgs e)
         {
             string userName1 = nameEnter1.Text;
@@ -87,42 +104,81 @@ namespace Memory
             File.WriteAllText(path, userName1 + delimiter + userName2 + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine);
         }
 
+        /// <summary>
+        /// Save the game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveGame_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("You can't save your game yet.");
         }
 
+        /// <summary>
+        /// Load a game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoadGame_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("You can't load a game yet.");
         }
 
+        /// <summary>
+        /// Reset the game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ResetGame_Click(object sender, RoutedEventArgs e)
         {
             Process.Start(Application.ResourceAssembly.Location);
             Application.Current.Shutdown();
         }
 
+        /// <summary>
+        /// Back to mainscreen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void toMain_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("A main screen has not been made yet.");
-        }
-
-        private void close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
+        /// <summary>
+        /// Close the game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void close_Click(object sender, RoutedEventArgs e)
+        {
+            for (int intCounter = App.Current.Windows.Count - 1; intCounter >= 0; intCounter--)
+                App.Current.Windows[intCounter].Close();
+        }
+
+        /// <summary>
+        /// Go to the wikipedia page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Help_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://nl.wikipedia.org/wiki/Memory");
         }
 
+        /// <summary>
+        /// Close the menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CloseMenuBar_Click(object sender, RoutedEventArgs e)
         {
             menuBar.Visibility = Visibility.Collapsed;
         }
 
+        /// <summary>
+        /// Call the scores from the grid and set them on the screen
+        /// </summary>
         internal static Spellenscherm main;
         internal string Score1
         {
@@ -148,6 +204,11 @@ namespace Memory
             set { Dispatcher.Invoke(new Action(() => { turn2.Content = value; })); }
         }
 
+        /// <summary>
+        /// Sets the image folder.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void setFolder_Click(object sender, RoutedEventArgs e)
         {
             string folderSet = setFolderBox.Text;

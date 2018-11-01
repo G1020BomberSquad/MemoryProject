@@ -589,7 +589,6 @@ namespace SpellenScherm
         {
             SetHighscore();
 
-
             // when the scores of player1 and player2 are the same
             if (scoreName1Tot == scoreName2Tot)
             {
@@ -609,6 +608,9 @@ namespace SpellenScherm
             }
         }
 
+        /// <summary>
+        /// Play a positive soundeffect
+        /// </summary>
         private void PlaySoundPositive()
         {
             System.IO.Stream str = Memory.Properties.Resources.pair;
@@ -616,6 +618,9 @@ namespace SpellenScherm
             snd.Play();
         }
 
+        /// <summary>
+        /// Play a negaive soundeffect
+        /// </summary>
         private void PlaySoundNegative()
         {
             System.IO.Stream str = Memory.Properties.Resources.fail;
@@ -623,6 +628,9 @@ namespace SpellenScherm
             snd.Play();
         }
 
+        /// <summary>
+        /// Play a soundeffect when the same card is clicked twice
+        /// </summary>
         private void PlaySoundStupid()
         {
             System.IO.Stream str = Memory.Properties.Resources.huh;
@@ -630,14 +638,19 @@ namespace SpellenScherm
             snd.Play();
         }
 
+        /// <summary>
+        /// Return the scores and playernames and put them on the scoreboard
+        /// </summary>
         private void SetHighscore()
         {
+            // grad the current highscores
             int OldHighscore1 = Memory.Properties.Settings.Default.highscore1;
             int OldHighscore2 = Memory.Properties.Settings.Default.highscore2;
             int OldHighscore3 = Memory.Properties.Settings.Default.highscore3;
             int OldHighscore4 = Memory.Properties.Settings.Default.highscore4;
             int OldHighscore5 = Memory.Properties.Settings.Default.highscore5;
 
+            // for player1
             if (scoreName1Tot > OldHighscore1 && scoreName1Tot != OldHighscore1)
             {
                 Memory.Properties.Settings.Default.highscore2 = Memory.Properties.Settings.Default.highscore1;
@@ -691,9 +704,7 @@ namespace SpellenScherm
                 Memory.Properties.Settings.Default.highscore5 = scoreName1Tot;
                 Memory.Properties.Settings.Default.name5 = Player1;
             }
-
-
-
+            // for player2
             if (scoreName2Tot > OldHighscore1 && scoreName2Tot != OldHighscore1)
             {
                 Memory.Properties.Settings.Default.highscore2 = Memory.Properties.Settings.Default.highscore1;

@@ -26,6 +26,7 @@ namespace Memory
         {
             InitializeComponent();
 
+            // get all the highscores and display them
             vak_naam1.Content = Memory.Properties.Settings.Default.name1;
             vak_naam2.Content = Memory.Properties.Settings.Default.name2;
             vak_naam3.Content = Memory.Properties.Settings.Default.name3;
