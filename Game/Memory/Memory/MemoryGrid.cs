@@ -50,6 +50,11 @@ namespace Memory
         private Image Image1;
         private Image Image2;
 
+        // Variables needed for saving
+        private string[,] saveDat;
+        private static string fileData = "";
+        public static string[,] resultVals;
+
         /// <summary>
         /// Initialize the grid and assign the images to the grid
         /// </summary>
@@ -63,7 +68,7 @@ namespace Memory
             this.cols = cols;
 
             InitializeGrid();
-            if (load == 1)
+            if (load == 1)                                          // Checks whether or not the game is being loaded from a save file
             {
                 AddImages(1);
             }
@@ -89,7 +94,7 @@ namespace Memory
         }
 
         /// <summary>
-        /// Adds images to the grid
+        /// Adds images to the grid. Depending on from load or not it gets the images
         /// </summary>
         private void AddImages(int load)
         {
@@ -141,17 +146,23 @@ namespace Memory
             }
         }
 
-        private string[,] saveDat;
+        /// <summary>
+        /// Gives each card an image from the save file.
+        /// Sets the saved variables as well.
+        /// </summary>
+        /// <returns></returns>
         public List<ImageSource> GetLoadedImagesList()
         {
             List<ImageSource> images = new List<ImageSource>();
             saveDat = GetSavefileData();
 
-            player1 = saveDat[0, 0];
+            player1 = saveDat[0, 0];                                // Sets the player names
             player2 = saveDat[0, 1];
-            scoreName1Tot = Convert.ToInt32(saveDat[1, 0]);
+
+            scoreName1Tot = Convert.ToInt32(saveDat[1, 0]);         // Sets the player's scores
             scoreName2Tot = Convert.ToInt32(saveDat[1, 1]);
-            if (saveDat[6, 0] == "P1")
+
+            if (saveDat[6, 0] == "P1")                              // Gives the correct player their turn
             {
                 turnName1 = true;
                 turnName2 = false;
@@ -163,7 +174,7 @@ namespace Memory
             }
 
 
-            for (int rowVals = 2; rowVals < 6; rowVals++)
+            for (int rowVals = 2; rowVals < 6; rowVals++)           // Places the id's from the correct folder in the correct place
             {
                 for (int colVals = 0; colVals < 4; colVals++)
                 {
@@ -172,11 +183,14 @@ namespace Memory
                     images.Add(source);
                 }
             }
+
             return images;
         }
 
-        private static string fileData = "";
-        public static string[,] resultVals;
+        /// <summary>
+        /// Get's the save data from a save file
+        /// </summary>
+        /// <returns>The save data in a 2d array</returns>
         public static string[,] GetSavefileData()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
