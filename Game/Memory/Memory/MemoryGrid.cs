@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.IO;
 using System.Xml.Serialization;
 
 namespace Memory
@@ -105,14 +104,14 @@ namespace Memory
         {
             if (load == 1)
             {
-                List<ImageSource> images = GetLoadedImagesList();
+                List<ImageSource> images = GetLoadedImagesList();                                       // Does not use the randomizer
                 for (int row = 0; row < rows; row++)
                 {
                     for (int col = 0; col < cols; col++)
                     {
                         // assign the back of the image
                         Image back = new Image();
-                        back.Source = new BitmapImage(new Uri("/images/back.png", UriKind.Relative));
+                        back.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.Relative));
 
                         // when one of the players click on a card
                         back.MouseDown += new System.Windows.Input.MouseButtonEventHandler(CardClick);
@@ -128,14 +127,14 @@ namespace Memory
             }
             else
             {
-                List<ImageSource> images = GetImagesList();
+                List<ImageSource> images = GetImagesList();                                             // Does use the randomizer
                 for (int row = 0; row < rows; row++)
                 {
                     for (int col = 0; col < cols; col++)
                     {
                         // assign the back of the image
                         Image back = new Image();
-                        back.Source = new BitmapImage(new Uri("/images/back.png", UriKind.Relative));
+                        back.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.Relative));
 
                         // when one of the players click on a card
                         back.MouseDown += new System.Windows.Input.MouseButtonEventHandler(CardClick);
@@ -158,11 +157,11 @@ namespace Memory
         /// <returns></returns>
         public List<ImageSource> GetLoadedImagesList()
         {
-            List<ImageSource> images = new List<ImageSource>();
-            saveDat = GetSavefileData();
+            List<ImageSource> images = new List<ImageSource>();     // Makes a new list to store the images in
+            saveDat = GetSavefileData();                            // Stores resultVals in another variable for ease of reading
 
-            player1 = saveDat[0, 0];                                // Sets the player names
-            player2 = saveDat[0, 1];
+            Player1 = saveDat[0, 0];                                // Sets the player names
+            Player2 = saveDat[0, 1];
 
             scoreName1Tot = Convert.ToInt32(saveDat[1, 0]);         // Sets the player's scores
             scoreName2Tot = Convert.ToInt32(saveDat[1, 1]);
@@ -184,7 +183,7 @@ namespace Memory
                 for (int colVals = 0; colVals < 4; colVals++)
                 {
                     string nr = Convert.ToString(saveDat[rowVals, colVals]);
-                    ImageSource source = new BitmapImage(new Uri("images/" + nr + ".png", UriKind.Relative));
+                    ImageSource source = new BitmapImage(new Uri(folder + "/" + nr + ".png", UriKind.Relative));
                     images.Add(source);
                 }
             }
@@ -198,26 +197,21 @@ namespace Memory
         /// <returns>The save data in a 2d array</returns>
         public static string[,] GetSavefileData()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            OpenFileDialog openFileDialog = new OpenFileDialog();                                                   // Opens a windows explorer in which you can choose your save file
             openFileDialog.InitialDirectory = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "saves");
             if (openFileDialog.ShowDialog() == true)
             {
-                fileData = File.ReadAllText(openFileDialog.FileName);
+                fileData = File.ReadAllText(openFileDialog.FileName);                                               // Puts everything from a save file into a string
+                fileData = fileData.Replace('\n', '\r');                                                            // Replaces the Line Feed with Carriage Return
 
-                fileData = fileData.Replace('\n', '\r');
+                string[] lines = fileData.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);        // Split lines into string
 
-                //Split lines into string
-                string[] lines = fileData.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
-
-                //Get total rows and columns
-                int totalRows = lines.Length;
+                int totalRows = lines.Length;                                                                       // Get total rows and columns
                 int totalCols = lines[0].Split(';').Length;
 
-                //Make new 2d array
-                resultVals = new string[totalRows, totalCols];
+                resultVals = new string[totalRows, totalCols];                                                      // Make new 2d array
 
-                //Place data in array
-                for (int row = 0; row < totalRows; row++)
+                for (int row = 0; row < totalRows; row++)                                                           // Place data in array
                 {
                     string[] line_r = lines[row].Split(';');
 
@@ -226,12 +220,11 @@ namespace Memory
                         resultVals[row, col] = line_r[col];
                     }
                 }
-
                 return resultVals;
             }
             else
             {
-                return null;
+                return null;        // Returning null if there is no openfiledialog, meaning the program can not load.
             }
         }
 

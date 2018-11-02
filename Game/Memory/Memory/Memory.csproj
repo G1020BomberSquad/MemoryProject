@@ -58,7 +58,6 @@
     <Compile Include="Highscores.xaml.cs">
       <DependentUpon>Highscores.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LoadSave.cs" />
     <Compile Include="MemoryGrid.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Spellenscherm.xaml.cs">

@@ -33,29 +33,11 @@ namespace Memory
             {
                 load_Game();
             }
-        }
-
-        private void load_Game()
-        {
-            start.Visibility = Visibility.Collapsed;
-            set1.Visibility = Visibility.Collapsed;
-            set2.Visibility = Visibility.Collapsed;
-            grid = new MemoryGrid(GameGrid, 4, 4, 1);
-            name1.Content = MemoryGrid.player1;
-            name2.Content = MemoryGrid.player2;
-            scoreName1.Content = MemoryGrid.scoreName1Tot;
-            scoreName2.Content = MemoryGrid.scoreName2Tot;
-        }
             if (!File.Exists(path))
             {
                 File.WriteAllText(path, "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready" + delimiter + "ready" + delimiter + "ready" + delimiter + "ready" + Environment.NewLine + "ready");
             }
         }
-            if (load == 1)
-            {
-                load_Game();
-            }
-        }
 
         private void load_Game()
         {
@@ -63,8 +45,8 @@ namespace Memory
             set1.Visibility = Visibility.Collapsed;
             set2.Visibility = Visibility.Collapsed;
             grid = new MemoryGrid(GameGrid, 4, 4, 1);
-            name1.Content = MemoryGrid.player1;
-            name2.Content = MemoryGrid.player2;
+            name1.Content = MemoryGrid.Player1;
+            name2.Content = MemoryGrid.Player2;
             scoreName1.Content = MemoryGrid.scoreName1Tot;
             scoreName2.Content = MemoryGrid.scoreName2Tot;
         }
@@ -96,7 +78,6 @@ namespace Memory
             folderDisplay.Width = 1058;
             
             // initialize grid
-            grid = new MemoryGrid(GameGrid, 4, 4);
             grid = new MemoryGrid(GameGrid, 4, 4, 0);
             start.Visibility = Visibility.Collapsed;
             turn1.Content = "Aan de beurt";
