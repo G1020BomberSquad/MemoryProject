@@ -1,6 +1,7 @@
-﻿using Memory;
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -8,9 +9,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.IO;
+using System.Xml.Serialization;
 
-namespace SpellenScherm
+namespace Memory
 {
     public class MemoryGrid
     {
@@ -28,8 +29,8 @@ namespace SpellenScherm
         static int numberOfClicks = 0;
 
         // the total scores which will be displayed to the players
-        static int scoreName1Tot;
-        static int scoreName2Tot;
+        public static int scoreName1Tot { get; set; }
+        public static int scoreName2Tot { get; set; }
 
         // variables to count if there is made a new point, and to make it easier to keep track of the turns
         static int scoreName1;
@@ -53,20 +54,32 @@ namespace SpellenScherm
         // Folder where images are stored
         public static string folder { get; set; }
 
+        // Variables needed for saving
+        private string[,] saveDat;
+        private static string fileData = "";
+        public static string[,] resultVals;
+
         /// <summary>
         /// Initialize the grid and assign the images to the grid
         /// </summary>
         /// <param name="grid">Defines the grid</param>
         /// <param name="rows">How many rows there are</param>
         /// <param name="cols">How many cols there are</param>
-        public MemoryGrid(Grid grid, int rows, int cols)
+        public MemoryGrid(Grid grid, int rows, int cols, int load)
         {
             this.grid = grid;
             this.rows = rows;
             this.cols = cols;
 
             InitializeGrid();
-            AddImages();
+            if (load == 1)                                          // Checks whether or not the game is being loaded from a save file
+            {
+                AddImages(1);
+            }
+            else
+            {
+                AddImages(0);
+            }
         }
 
         /// <summary>
@@ -85,29 +98,133 @@ namespace SpellenScherm
         }
 
         /// <summary>
-        /// Adds images to the grid
+        /// Adds images to the grid. Depending on from load or not it gets the images
         /// </summary>
-        private void AddImages()
+        private void AddImages(int load)
         {
-            List<ImageSource> images = GetImagesList();
-            for (int row = 0; row < rows; row++)
+            if (load == 1)
             {
-                for (int col = 0; col < cols; col++)
+                List<ImageSource> images = GetLoadedImagesList();                                       // Does not use the randomizer
+                for (int row = 0; row < rows; row++)
                 {
-                    // assign the back of the image
-                    Image back = new Image();
-                    back.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.RelativeOrAbsolute));
+                    for (int col = 0; col < cols; col++)
+                    {
+                        // assign the back of the image
+                        Image back = new Image();
+                        back.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.Relative));
 
-                    // when one of the players click on a card
-                    back.MouseDown += new System.Windows.Input.MouseButtonEventHandler(CardClick);
+                        // when one of the players click on a card
+                        back.MouseDown += new System.Windows.Input.MouseButtonEventHandler(CardClick);
 
-                    // set the cards
-                    back.Tag = images.First();
-                    images.RemoveAt(0);
-                    Grid.SetColumn(back, col);
-                    Grid.SetRow(back, row);
-                    grid.Children.Add(back);
+                        // set the cards
+                        back.Tag = images.First();
+                        images.RemoveAt(0);
+                        Grid.SetColumn(back, col);
+                        Grid.SetRow(back, row);
+                        grid.Children.Add(back);
+                    }
                 }
+            }
+            else
+            {
+                List<ImageSource> images = GetImagesList();                                             // Does use the randomizer
+                for (int row = 0; row < rows; row++)
+                {
+                    for (int col = 0; col < cols; col++)
+                    {
+                        // assign the back of the image
+                        Image back = new Image();
+                        back.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.Relative));
+
+                        // when one of the players click on a card
+                        back.MouseDown += new System.Windows.Input.MouseButtonEventHandler(CardClick);
+
+                        // set the cards
+                        back.Tag = images.First();
+                        images.RemoveAt(0);
+                        Grid.SetColumn(back, col);
+                        Grid.SetRow(back, row);
+                        grid.Children.Add(back);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gives each card an image from the save file.
+        /// Sets the saved variables as well.
+        /// </summary>
+        /// <returns></returns>
+        public List<ImageSource> GetLoadedImagesList()
+        {
+            List<ImageSource> images = new List<ImageSource>();     // Makes a new list to store the images in
+            saveDat = GetSavefileData();                            // Stores resultVals in another variable for ease of reading
+
+            Player1 = saveDat[0, 0];                                // Sets the player names
+            Player2 = saveDat[0, 1];
+
+            scoreName1Tot = Convert.ToInt32(saveDat[1, 0]);         // Sets the player's scores
+            scoreName2Tot = Convert.ToInt32(saveDat[1, 1]);
+
+            if (saveDat[6, 0] == "P1")                              // Gives the correct player their turn
+            {
+                turnName1 = true;
+                turnName2 = false;
+            }
+            else
+            {
+                turnName1 = false;
+                turnName2 = true;
+            }
+
+
+            for (int rowVals = 2; rowVals < 6; rowVals++)           // Places the id's from the correct folder in the correct place
+            {
+                for (int colVals = 0; colVals < 4; colVals++)
+                {
+                    string nr = Convert.ToString(saveDat[rowVals, colVals]);
+                    ImageSource source = new BitmapImage(new Uri(folder + "/" + nr + ".png", UriKind.Relative));
+                    images.Add(source);
+                }
+            }
+
+            return images;
+        }
+
+        /// <summary>
+        /// Get's the save data from a save file
+        /// </summary>
+        /// <returns>The save data in a 2d array</returns>
+        public static string[,] GetSavefileData()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();                                                   // Opens a windows explorer in which you can choose your save file
+            openFileDialog.InitialDirectory = Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "saves");
+            if (openFileDialog.ShowDialog() == true)
+            {
+                fileData = File.ReadAllText(openFileDialog.FileName);                                               // Puts everything from a save file into a string
+                fileData = fileData.Replace('\n', '\r');                                                            // Replaces the Line Feed with Carriage Return
+
+                string[] lines = fileData.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);        // Split lines into string
+
+                int totalRows = lines.Length;                                                                       // Get total rows and columns
+                int totalCols = lines[0].Split(';').Length;
+
+                resultVals = new string[totalRows, totalCols];                                                      // Make new 2d array
+
+                for (int row = 0; row < totalRows; row++)                                                           // Place data in array
+                {
+                    string[] line_r = lines[row].Split(';');
+
+                    for (int col = 0; col < totalCols; col++)
+                    {
+                        resultVals[row, col] = line_r[col];
+                    }
+                }
+                return resultVals;
+            }
+            else
+            {
+                return null;        // Returning null if there is no openfiledialog, meaning the program can not load.
             }
         }
 
@@ -123,7 +240,8 @@ namespace SpellenScherm
             // two lists that keep track of the used images, so there are only 2 cards of the sort
             List<string> random1 = new List<string>();
             List<string> random2 = new List<string>();
-                      
+            
+            // variables used for saving the grind into a savefile
             string C1 = null;
             string C2 = null;
             string C3 = null;
@@ -165,6 +283,7 @@ namespace SpellenScherm
                         ImageSource source = new BitmapImage(new Uri(folder + "/" + imageNR + ".png", UriKind.RelativeOrAbsolute));
                         images.Add(source);
 
+                        //places the randomly picked cards into the variables
                         if (i == 0)
                         {
                             C1 = Convert.ToString(imageNR);
@@ -220,6 +339,7 @@ namespace SpellenScherm
                         ImageSource source = new BitmapImage(new Uri(folder + "/" + imageNR + ".png", UriKind.RelativeOrAbsolute));
                         images.Add(source);
 
+                        //reads savefile
                         string path = @"Save1.csv";
 
                         var reader = new StreamReader(File.OpenRead(path));
@@ -237,6 +357,7 @@ namespace SpellenScherm
 
                         string delimiter = ";";
 
+                        //places the randomly picked cards into variables
                         if (i == 8)
                         {
                             C9 = Convert.ToString(imageNR);
@@ -270,8 +391,8 @@ namespace SpellenScherm
                             C16 = Convert.ToString(imageNR);
                         }
 
-
-                        File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + "0" + delimiter + "0" + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + C1 + delimiter + C2 + delimiter + C3 + delimiter + C4 + Environment.NewLine + C5 + delimiter + C6 + delimiter + C7 + delimiter + C8 + Environment.NewLine + C9 + delimiter + C10 + delimiter + C11 + delimiter + C12 + Environment.NewLine + C13 + delimiter + C14 + delimiter + C15 + delimiter + C16 + Environment.NewLine);
+                        //writes the variables into the savefile
+                        File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + "0" + delimiter + "0" + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + C1 + delimiter + C2 + delimiter + C3 + delimiter + C4 + Environment.NewLine + C5 + delimiter + C6 + delimiter + C7 + delimiter + C8 + Environment.NewLine + C9 + delimiter + C10 + delimiter + C11 + delimiter + C12 + Environment.NewLine + C13 + delimiter + C14 + delimiter + C15 + delimiter + C16 + Environment.NewLine + data[6][0]);
                     }
                 }
             }
@@ -368,7 +489,7 @@ namespace SpellenScherm
                 GetPoint(card1, card2);
 
 
-
+                //reads savefile
                 string path = @"Save1.csv";
                 string cardnr = null;
 
@@ -385,15 +506,16 @@ namespace SpellenScherm
                 }
                 reader.Close();
 
-
+                //turns the card's name into a number
                 for (int b = 1; b < 9; b++)
                 {
-                    if (Convert.ToString(card1.Source) == "pack://application:,,,/Memory;component/images/" + b + ".png")
+                    if (Convert.ToString(card1.Source).Contains(b + ".png"))
                     {
                         cardnr = Convert.ToString(b);
                     }
                 }
 
+                //removes the 2 clicked cards from the savefile
                 string delimiter = ";";
                 int i;
                 int x;
@@ -409,7 +531,7 @@ namespace SpellenScherm
                     }
                 }
 
-                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine);
+                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine + data[6][0]);
             }
             // if 2 images are clicked, they are not the same and the same card is not clicked twice
             else
@@ -446,6 +568,23 @@ namespace SpellenScherm
         /// </summary>
         private void CheckTurn()
         {
+            //reads savefile
+            string path = @"Save1.csv";
+            string delimiter = ";";
+
+            var reader = new StreamReader(File.OpenRead(path));
+            var data = new List<List<string>>();
+
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(';');
+
+                data.Add(new List<String> { values[0], values[1], values[2], values[3]
+                        });
+            }
+            reader.Close();
+
             // check if its player1's turn
             if (turnName1 == true)
             {
@@ -459,6 +598,8 @@ namespace SpellenScherm
                 {
                     turnName1 = false;
                     turnName2 = true;
+
+                    File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine + "P2");
                 }
             }
             // check if its player2's turn
@@ -474,6 +615,8 @@ namespace SpellenScherm
                 {
                     turnName2 = false;
                     turnName1 = true;
+
+                    File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine + "P1");
                 }
             }
         }
@@ -513,6 +656,7 @@ namespace SpellenScherm
         /// <param name="card2">The second card that has been clicked</param>
         private async void GetPoint(Image card1, Image card2)
         {
+            //reads savefile
             string path = @"Save1.csv";
             string delimiter = ";";
 
@@ -537,7 +681,7 @@ namespace SpellenScherm
 
                 data[1][0] = Convert.ToString(Convert.ToInt32(data[1][0]) + 1);
 
-                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine);
+                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine + data[6][0]);
             }
             // if its player2's turn, increase their score
             else if (turnName2 == true)
@@ -547,7 +691,7 @@ namespace SpellenScherm
 
                 data[1][1] = Convert.ToString(Convert.ToInt32(data[1][1]) + 1);
 
-                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine);
+                File.WriteAllText(path, data[0][0] + delimiter + data[0][1] + delimiter + data[0][2] + delimiter + data[0][3] + Environment.NewLine + data[1][0] + delimiter + data[1][1] + delimiter + data[1][2] + delimiter + data[1][3] + Environment.NewLine + data[2][0] + delimiter + data[2][1] + delimiter + data[2][2] + delimiter + data[2][3] + Environment.NewLine + data[3][0] + delimiter + data[3][1] + delimiter + data[3][2] + delimiter + data[3][3] + Environment.NewLine + data[4][0] + delimiter + data[4][1] + delimiter + data[4][2] + delimiter + data[4][3] + Environment.NewLine + data[5][0] + delimiter + data[5][1] + delimiter + data[5][2] + delimiter + data[5][3] + Environment.NewLine + data[6][0]);
             }
 
             // wait a third of a second, show the second card first
@@ -586,6 +730,8 @@ namespace SpellenScherm
         /// </summary>
         private void CheckWinner()
         {
+            SetHighscore();
+
             // when the scores of player1 and player2 are the same
             if (scoreName1Tot == scoreName2Tot)
             {
@@ -605,6 +751,9 @@ namespace SpellenScherm
             }
         }
 
+        /// <summary>
+        /// Play a positive soundeffect
+        /// </summary>
         private void PlaySoundPositive()
         {
             System.IO.Stream str = Memory.Properties.Resources.pair;
@@ -612,6 +761,9 @@ namespace SpellenScherm
             snd.Play();
         }
 
+        /// <summary>
+        /// Play a negaive soundeffect
+        /// </summary>
         private void PlaySoundNegative()
         {
             System.IO.Stream str = Memory.Properties.Resources.fail;
@@ -619,11 +771,138 @@ namespace SpellenScherm
             snd.Play();
         }
 
+        /// <summary>
+        /// Play a soundeffect when the same card is clicked twice
+        /// </summary>
         private void PlaySoundStupid()
         {
             System.IO.Stream str = Memory.Properties.Resources.huh;
             System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
             snd.Play();
+        }
+
+        /// <summary>
+        /// Return the scores and playernames and put them on the scoreboard
+        /// </summary>
+        private void SetHighscore()
+        {
+            // grad the current highscores
+            int OldHighscore1 = Memory.Properties.Settings.Default.highscore1;
+            int OldHighscore2 = Memory.Properties.Settings.Default.highscore2;
+            int OldHighscore3 = Memory.Properties.Settings.Default.highscore3;
+            int OldHighscore4 = Memory.Properties.Settings.Default.highscore4;
+            int OldHighscore5 = Memory.Properties.Settings.Default.highscore5;
+
+            // for player1
+            if (scoreName1Tot > OldHighscore1 && scoreName1Tot != OldHighscore1)
+            {
+                Memory.Properties.Settings.Default.highscore2 = Memory.Properties.Settings.Default.highscore1;
+                Memory.Properties.Settings.Default.highscore3 = Memory.Properties.Settings.Default.highscore2;
+                Memory.Properties.Settings.Default.highscore4 = Memory.Properties.Settings.Default.highscore3;
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name2 = Memory.Properties.Settings.Default.name1;
+                Memory.Properties.Settings.Default.name3 = Memory.Properties.Settings.Default.name2;
+                Memory.Properties.Settings.Default.name4 = Memory.Properties.Settings.Default.name3;
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore1 = scoreName1Tot;
+                Memory.Properties.Settings.Default.name1 = Player1;
+            }
+            else if (scoreName1Tot > OldHighscore2 && scoreName1Tot != OldHighscore2)
+            {
+                Memory.Properties.Settings.Default.highscore3 = Memory.Properties.Settings.Default.highscore2;
+                Memory.Properties.Settings.Default.highscore4 = Memory.Properties.Settings.Default.highscore3;
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name3 = Memory.Properties.Settings.Default.name2;
+                Memory.Properties.Settings.Default.name4 = Memory.Properties.Settings.Default.name3;
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore2 = scoreName1Tot;
+                Memory.Properties.Settings.Default.name2 = Player1;
+            }
+            else if (scoreName1Tot > OldHighscore3 && scoreName1Tot != OldHighscore3)
+            {
+                Memory.Properties.Settings.Default.highscore4 = Memory.Properties.Settings.Default.highscore3;
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name4 = Memory.Properties.Settings.Default.name3;
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore3 = scoreName1Tot;
+                Memory.Properties.Settings.Default.name3 = Player1;
+            }
+            else if (scoreName1Tot > OldHighscore4 && scoreName1Tot != OldHighscore4)
+            {
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore4 = scoreName1Tot;
+                Memory.Properties.Settings.Default.name4 = Player1;
+            }
+            else if (scoreName1Tot > OldHighscore5 && scoreName1Tot != OldHighscore5)
+            {
+                Memory.Properties.Settings.Default.highscore5 = scoreName1Tot;
+                Memory.Properties.Settings.Default.name5 = Player1;
+            }
+            // for player2
+            if (scoreName2Tot > OldHighscore1 && scoreName2Tot != OldHighscore1)
+            {
+                Memory.Properties.Settings.Default.highscore2 = Memory.Properties.Settings.Default.highscore1;
+                Memory.Properties.Settings.Default.highscore3 = Memory.Properties.Settings.Default.highscore2;
+                Memory.Properties.Settings.Default.highscore4 = Memory.Properties.Settings.Default.highscore3;
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name2 = Memory.Properties.Settings.Default.name1;
+                Memory.Properties.Settings.Default.name3 = Memory.Properties.Settings.Default.name2;
+                Memory.Properties.Settings.Default.name4 = Memory.Properties.Settings.Default.name3;
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore1 = scoreName2Tot;
+                Memory.Properties.Settings.Default.name1 = Player2;
+            }
+            else if (scoreName2Tot > OldHighscore2 && scoreName2Tot != OldHighscore2)
+            {
+                Memory.Properties.Settings.Default.highscore3 = Memory.Properties.Settings.Default.highscore2;
+                Memory.Properties.Settings.Default.highscore4 = Memory.Properties.Settings.Default.highscore3;
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name3 = Memory.Properties.Settings.Default.name2;
+                Memory.Properties.Settings.Default.name4 = Memory.Properties.Settings.Default.name3;
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore2 = scoreName2Tot;
+                Memory.Properties.Settings.Default.name2 = Player2;
+            }
+            else if (scoreName2Tot > OldHighscore3 && scoreName2Tot != OldHighscore3)
+            {
+                Memory.Properties.Settings.Default.highscore4 = Memory.Properties.Settings.Default.highscore3;
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name4 = Memory.Properties.Settings.Default.name3;
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore3 = scoreName2Tot;
+                Memory.Properties.Settings.Default.name3 = Player2;
+            }
+            else if (scoreName2Tot > OldHighscore4 && scoreName2Tot != OldHighscore4)
+            {
+                Memory.Properties.Settings.Default.highscore5 = Memory.Properties.Settings.Default.highscore4;
+
+                Memory.Properties.Settings.Default.name5 = Memory.Properties.Settings.Default.name4;
+
+                Memory.Properties.Settings.Default.highscore4 = scoreName2Tot;
+                Memory.Properties.Settings.Default.name4 = Player2;
+            }
+            else if (scoreName2Tot > OldHighscore5 && scoreName2Tot != OldHighscore5)
+            {
+                Memory.Properties.Settings.Default.highscore5 = scoreName2Tot;
+                Memory.Properties.Settings.Default.name5 = Player2;
+            }
+            Memory.Properties.Settings.Default.Save();
+            Memory.Properties.Settings.Default.Reload();
         }
     }
 }

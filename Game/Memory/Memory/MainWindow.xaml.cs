@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,26 +29,52 @@ namespace Memory
             snd.Play();
         }
 
+        /// <summary>
+        /// Open a new gamewindow
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NewGame_Click(object sender, RoutedEventArgs e)
         {
-            new Spellenscherm().ShowDialog();
+            new Spellenscherm(0).ShowDialog();
         }
 
+        /// <summary>
+        /// Resume a game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Hervatten_Click(object sender, RoutedEventArgs e)
         {
-
+            int load = 1;
+            new Spellenscherm(load).ShowDialog();
         }
 
+        /// <summary>
+        /// Show the highscores window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Highscore_Click(object sender, RoutedEventArgs e)
         {
             new Highscores().ShowDialog();
         }
 
+        /// <summary>
+        /// Set the themes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Themas_Click(object sender, RoutedEventArgs e)
         {
             new Thema().ShowDialog();
         }
 
+        /// <summary>
+        /// Close the game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
