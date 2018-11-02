@@ -5,11 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Memory"
         mc:Ignorable="d"
-<<<<<<< HEAD
-        Title="MainWindow" Height="450" Width="800">A
-=======
         Title="MainWindow" Height="1080" Width="1920" WindowState="Maximized">
->>>>>>> 217a634a5f515dab20032720e172ef215ce2b450
+
     <Grid Background="Aqua">
         <Label Content="Memory" HorizontalAlignment="Left"  Height="192" Margin="838,96,0,0" VerticalAlignment="Top" Width="284" FontSize="72" Foreground="HotPink"/>
         <Button x:Name="newGame" Content="Nieuw spel" HorizontalAlignment="Left" Height="97" Margin="677,383,0,0" VerticalAlignment="Top" Width="589" BorderBrush="#FFEA0B93" Click="NewGame_Click" FontSize="22"/>
