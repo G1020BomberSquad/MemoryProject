@@ -55,13 +55,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Highscores.xaml.cs">
+      <DependentUpon>Highscores.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoadSave.cs" />
     <Compile Include="MemoryGrid.cs" />
     <Compile Include="Spellenscherm.xaml.cs">
       <DependentUpon>Spellenscherm.xaml</DependentUpon>
     </Compile>
+<<<<<<< HEAD
     <Compile Include="Thema.xaml.cs">
       <DependentUpon>Thema.xaml</DependentUpon>
     </Compile>
+=======
+    <Page Include="Highscores.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+>>>>>>> 217a634a5f515dab20032720e172ef215ce2b450
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -109,7 +120,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="images\1.png" />
     <Resource Include="images\2.png" />
@@ -121,6 +131,18 @@
     <Resource Include="images\8.png" />
     <Resource Include="images\back.png" />
     <Resource Include="images\logo2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="sounds\base.wav" />
+    <Content Include="sounds\even.wav" />
+    <Content Include="sounds\fail.wav" />
+    <Content Include="sounds\huh.wav" />
+    <None Include="sounds\lobby.wav" />
+    <Content Include="sounds\pair.wav" />
+    <Content Include="sounds\win.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

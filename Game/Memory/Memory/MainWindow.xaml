@@ -5,13 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Memory"
         mc:Ignorable="d"
+<<<<<<< HEAD
         Title="MainWindow" Height="450" Width="800">A
+=======
+        Title="MainWindow" Height="1080" Width="1920" WindowState="Maximized">
+>>>>>>> 217a634a5f515dab20032720e172ef215ce2b450
     <Grid Background="Aqua">
-        <Label Content="Memory" HorizontalAlignment="Left"  Height="109" Margin="236,24,0,0" VerticalAlignment="Top" Width="295" FontSize="72" Foreground="HotPink"/>
-        <Button x:Name="newGame" Content="Nieuw spel" HorizontalAlignment="Left" Height="39" Margin="291,168,0,0" VerticalAlignment="Top" Width="202" BorderBrush="#FFEA0B93" Click="newGame_Click"/>
-        <Button x:Name="hervatten" Content="Spel Hervatten" HorizontalAlignment="Left" Height="39" Margin="291,228,0,0" VerticalAlignment="Top" Width="202" BorderBrush="#FFEA0B93" Click="hervatten_Click"/>
-        <Button x:Name="themas" Content="Thema's kiezen" HorizontalAlignment="Left" Height="39" Margin="291,348,0,0" VerticalAlignment="Top" Width="202" BorderBrush="#FFEA0B93" Click="themas_Click"/>
-        <Button Content="Aan/Uit" HorizontalAlignment="Left" Height="32" Margin="741,0,0,0" VerticalAlignment="Top" Width="43" BorderBrush="#FFEA0B93"/>
-        <Button x:Name="highscore" Content="Highscores" HorizontalAlignment="Left" Height="41" Margin="291,284,0,0" VerticalAlignment="Top" Width="202" BorderBrush="#FFEA0B93" Click="highscore_Click"/>
+        <Label Content="Memory" HorizontalAlignment="Left"  Height="192" Margin="838,96,0,0" VerticalAlignment="Top" Width="284" FontSize="72" Foreground="HotPink"/>
+        <Button x:Name="newGame" Content="Nieuw spel" HorizontalAlignment="Left" Height="97" Margin="677,383,0,0" VerticalAlignment="Top" Width="589" BorderBrush="#FFEA0B93" Click="NewGame_Click" FontSize="22"/>
+        <Button x:Name="hervatten" Content="Spel Hervatten" HorizontalAlignment="Left" Height="97" Margin="677,533,0,0" VerticalAlignment="Top" Width="589" BorderBrush="#FFEA0B93" Click="Hervatten_Click" FontSize="22"/>
+        <Button x:Name="themas" Content="Thema's kiezen" HorizontalAlignment="Left" Height="97" Margin="677,832,0,0" VerticalAlignment="Top" Width="589" BorderBrush="#FFEA0B93" Click="Themas_Click" FontSize="22"/>
+        <Button x:Name="close" Content="Exit Game" HorizontalAlignment="Left" Height="80" Margin="1678,929,0,0" VerticalAlignment="Top" Width="180" BorderBrush="#FFEA0B93" Click="Close_Click" FontSize="22"/>
+        <Button x:Name="highscore" Content="Highscores" HorizontalAlignment="Left" Height="103" Margin="677,672,0,0" VerticalAlignment="Top" Width="589" BorderBrush="#FFEA0B93" Click="Highscore_Click" FontSize="22"/>
     </Grid>
 </Window>
