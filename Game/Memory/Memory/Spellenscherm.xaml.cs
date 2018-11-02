@@ -130,16 +130,6 @@ namespace Memory
             MessageBox.Show("You can't save your game yet.");
         }
 
-        /// <summary>
-        /// Load a game
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void LoadGame_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("You can't load a game yet.");
-
-        }
 
         /// <summary>
         /// Reset the game
