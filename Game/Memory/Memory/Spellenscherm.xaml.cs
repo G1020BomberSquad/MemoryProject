@@ -41,6 +41,15 @@ namespace Memory
 
         private void load_Game()
         {
+            // check if a custom folder has been set
+            if (Convert.ToString(folderDisplay.Content) == "Folder: /images")
+            {
+                MemoryGrid.folder = "/images";
+            }
+            setFolderBox.Visibility = Visibility.Collapsed;
+            setFolder.Visibility = Visibility.Collapsed;
+            folderDisplay.Width = 1058;
+
             start.Visibility = Visibility.Collapsed;
             set1.Visibility = Visibility.Collapsed;
             set2.Visibility = Visibility.Collapsed;

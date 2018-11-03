@@ -53,7 +53,7 @@ namespace Memory
 
         // Folder where images are stored
         public static string folder { get; set; }
-
+        
         // Variables needed for saving
         private string[,] saveDat;
         private static string fileData = "";
@@ -111,17 +111,30 @@ namespace Memory
                     {
                         // assign the back of the image
                         Image back = new Image();
-                        back.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.Relative));
+                        if (Convert.ToInt32(images.First()) != 0)
+                        {
+                            back.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.Relative));
 
-                        // when one of the players click on a card
-                        back.MouseDown += new System.Windows.Input.MouseButtonEventHandler(CardClick);
+                            // when one of the players click on a card
+                            back.MouseDown += new System.Windows.Input.MouseButtonEventHandler(CardClick);
 
-                        // set the cards
-                        back.Tag = images.First();
-                        images.RemoveAt(0);
-                        Grid.SetColumn(back, col);
-                        Grid.SetRow(back, row);
-                        grid.Children.Add(back);
+                            // set the cards
+                            back.Tag = images.First();
+                            images.RemoveAt(0);
+                            Grid.SetColumn(back, col);
+                            Grid.SetRow(back, row);
+                            grid.Children.Add(back);
+                        }
+                        else
+                        {
+                            back.Source = new BitmapImage(new Uri("", UriKind.Relative));
+
+                            // set the cards
+                            images.RemoveAt(0);
+                            Grid.SetColumn(back, col);
+                            Grid.SetRow(back, row);
+                            grid.Children.Add(back);
+                        }
                     }
                 }
             }
@@ -183,8 +196,16 @@ namespace Memory
                 for (int colVals = 0; colVals < 4; colVals++)
                 {
                     string nr = Convert.ToString(saveDat[rowVals, colVals]);
-                    ImageSource source = new BitmapImage(new Uri(folder + "/" + nr + ".png", UriKind.Relative));
-                    images.Add(source);
+                    if (!string.IsNullOrEmpty(nr))
+                    {
+                        ImageSource source = new BitmapImage(new Uri(folder + "/" + nr + ".png", UriKind.Relative));
+                        images.Add(source);
+                    }
+                    else
+                    {
+                        ImageSource source = new BitmapImage(new Uri("", UriKind.RelativeOrAbsolute));
+                        images.Add(source);
+                    }
                 }
             }
 
