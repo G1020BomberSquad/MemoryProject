@@ -46,8 +46,6 @@ namespace Memory
             {
                 MemoryGrid.folder = "/images";
             }
-            setFolderBox.Visibility = Visibility.Collapsed;
-            setFolder.Visibility = Visibility.Collapsed;
             folderDisplay.Width = 1058;
 
             start.Visibility = Visibility.Collapsed;

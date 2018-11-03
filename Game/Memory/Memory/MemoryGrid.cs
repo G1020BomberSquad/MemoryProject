@@ -111,7 +111,7 @@ namespace Memory
                     {
                         // assign the back of the image
                         Image back = new Image();
-                        if (Convert.ToInt32(images.First()) != 0)
+                        if (Convert.ToString(images.First()) != "")
                         {
                             back.Source = new BitmapImage(new Uri(folder + "/back.png", UriKind.Relative));
 
@@ -183,11 +183,15 @@ namespace Memory
             {
                 turnName1 = true;
                 turnName2 = false;
+                Spellenscherm.main.setTurn1 = "Aan de beurt";
+                Spellenscherm.main.setTurn2 = "";
             }
             else
             {
                 turnName1 = false;
                 turnName2 = true;
+                Spellenscherm.main.setTurn1 = "";
+                Spellenscherm.main.setTurn2 = "Aan de beurt";
             }
 
 
